@@ -1,0 +1,9 @@
+{
+  "menu": {
+    "dashboard": "Dashboard",
+    "players": "Giocatori",
+    "matches": "Partite"
+  },
+  "login": "Login",
+  "signup": "Registrati"
+}

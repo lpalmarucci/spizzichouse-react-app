@@ -18,6 +18,7 @@ import {
   DropdownTrigger,
   DropdownSection,
 } from "@nextui-org/dropdown";
+import { useTranslation } from "react-i18next";
 
 interface IHeaderComponentProps {}
 
@@ -35,6 +36,7 @@ const menuItems = [
 ];
 
 const Header = (props: IHeaderComponentProps) => {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} className={"bg-inherit"}>
@@ -64,17 +66,17 @@ const Header = (props: IHeaderComponentProps) => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link href="#" color="primary">
-            Dashboard
+            {t("menu.dashboard")}
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
           <Link href="#" aria-current="page" color="secondary">
-            Players
+            {t("menu.players")}
           </Link>
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href="#">
-            Locations
+            {t("menu.matches")}
           </Link>
         </NavbarItem>
       </NavbarContent>
