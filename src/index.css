@@ -17,11 +17,16 @@
     sans-serif;
 
   color-scheme: light dark;
-  background-color: #242424;
+  /* background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+.link-active {
+  text-decoration: underline;
+  @apply font-semibold text-[color:var(--spizzi-primary-500)];
 }

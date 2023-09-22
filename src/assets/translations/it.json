@@ -4,6 +4,11 @@
     "players": "Giocatori",
     "matches": "Partite"
   },
-  "login": "Login",
-  "signup": "Registrati"
+  "buttons": {
+    "login": "Login",
+    "signup": "Registrati",
+    "logout": "Logout",
+    "settings": "Impostazioni",
+    "signInAs": "Entrato come"
+  }
 }

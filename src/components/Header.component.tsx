@@ -19,6 +19,8 @@ import {
   DropdownSection,
 } from "@nextui-org/dropdown";
 import { useTranslation } from "react-i18next";
+import { ROUTES } from "../routes/common.routes";
+import { NavLink } from "react-router-dom";
 
 interface IHeaderComponentProps {}
 
@@ -38,44 +40,34 @@ const menuItems = [
 const Header = (props: IHeaderComponentProps) => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  console.log(window.location.pathname === ROUTES.Dashboard);
+
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} className={"bg-inherit"}>
-      <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              className="w-full"
-              color={
-                index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"
-              }
-              href="#"
-              size="lg"
-            >
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
       <NavbarBrand>
+        {/* <Image src={Logo } width={250} /> */}
         <p className="font-bold text-inherit">SPIZZICHOUSE</p>
       </NavbarBrand>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link href="#" color="primary">
+        <NavbarItem isActive={window.location.pathname === ROUTES.Dashboard}>
+          <NavLink
+            to={ROUTES.Dashboard}
+            color="primary"
+            className={({ isActive }) => (isActive ? "link-active" : "")}
+          >
             {t("menu.dashboard")}
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page" color="secondary">
-            {t("menu.players")}
-          </Link>
+          </NavLink>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <NavLink to={ROUTES.Players}>{t("menu.players")}</NavLink>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href={ROUTES.Matches}>
             {t("menu.matches")}
           </Link>
         </NavbarItem>
@@ -93,18 +85,38 @@ const Header = (props: IHeaderComponentProps) => {
               src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="solid">
-            <DropdownSection title="User">
-              <DropdownItem key="profile" className="h-14 gap-2" isReadOnly>
-                <p className="font-semibold">Signed in as</p>
+          <DropdownMenu aria-label="Profile Actions">
+            <DropdownSection title="User" showDivider>
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold">{t("buttons.signInAs")}</p>
                 <p className="font-semibold">zoey@example.com</p>
               </DropdownItem>
-              <DropdownItem key="settings">My Settings</DropdownItem>
+              <DropdownItem key="settings">{t("buttons.settings")}</DropdownItem>
             </DropdownSection>
-            <DropdownItem key="logout">Log Out</DropdownItem>
+            <DropdownSection title="Actions">
+              <DropdownItem key="logout" color="danger" className="text-danger">
+                {t("buttons.logout")}
+              </DropdownItem>
+            </DropdownSection>
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
+      <NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item}-${index}`}>
+            <Link
+              className="w-full"
+              color={
+                index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"
+              }
+              href="#"
+              size="lg"
+            >
+              {item}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </Navbar>
   );
 };
