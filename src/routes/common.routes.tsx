@@ -3,11 +3,15 @@ import Page from "../pages/Dashboard.page";
 import Header from "../components/Header.component";
 import DashboardPage from "../pages/Dashboard.page";
 import PlayersPage from "../pages/Players.page";
+import LocationsPage from "../pages/Locations.page";
+import LoginPage from "../pages/Login.page";
 
 export const ROUTES = {
   Dashboard: "/dashboard",
   Players: "/players",
   Matches: "/matches",
+  Locations: "/locations",
+  Login: "/login",
 };
 
 const commonRoutes: RouteObject[] = [
@@ -31,10 +35,18 @@ const commonRoutes: RouteObject[] = [
         element: <DashboardPage />,
       },
       {
+        path: "locations",
+        element: <LocationsPage />,
+      },
+      {
         path: "players",
         element: <PlayersPage />,
       },
     ],
+  },
+  {
+    path: "login",
+    element: <LoginPage />,
   },
   {
     path: "**",

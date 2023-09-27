@@ -1,8 +1,16 @@
 {
+  "appName": "Spizzichouse",
   "menu": {
     "dashboard": "Dashboard",
     "players": "Giocatori",
-    "matches": "Partite"
+    "matches": "Partite",
+    "locations": "Luoghi"
+  },
+  "players": {
+    "list": "Lista giocatori"
+  },
+  "locations": {
+    "list": "Lista luoghi"
   },
   "buttons": {
     "login": "Login",
@@ -10,5 +18,9 @@
     "logout": "Logout",
     "settings": "Impostazioni",
     "signInAs": "Entrato come"
+  },
+  "label": {
+    "username": "Username",
+    "password": "Password"
   }
 }

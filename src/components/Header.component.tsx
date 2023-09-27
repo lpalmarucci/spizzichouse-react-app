@@ -20,28 +20,22 @@ import {
 } from "@nextui-org/dropdown";
 import { useTranslation } from "react-i18next";
 import { ROUTES } from "../routes/common.routes";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useSignOut } from "react-auth-kit";
 
 interface IHeaderComponentProps {}
-
-const menuItems = [
-  "Profile",
-  "Dashboard",
-  "Activity",
-  "Analytics",
-  "System",
-  "Deployments",
-  "My Settings",
-  "Team Settings",
-  "Help & Feedback",
-  "Log Out",
-];
 
 const Header = (props: IHeaderComponentProps) => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const signOut = useSignOut();
+  const navigate = useNavigate();
 
-  console.log(window.location.pathname === ROUTES.Dashboard);
+  function handleLogout() {
+    if (signOut()) {
+      navigate(ROUTES.Login);
+    }
+  }
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} className={"bg-inherit"}>
@@ -49,8 +43,12 @@ const Header = (props: IHeaderComponentProps) => {
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
       <NavbarBrand>
-        {/* <Image src={Logo } width={250} /> */}
-        <p className="font-bold text-inherit">SPIZZICHOUSE</p>
+        <p
+          className="font-bold text-inherit cursor-pointer"
+          onClick={() => navigate(ROUTES.Dashboard)}
+        >
+          SPIZZICHOUSE
+        </p>
       </NavbarBrand>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -64,7 +62,20 @@ const Header = (props: IHeaderComponentProps) => {
           </NavLink>
         </NavbarItem>
         <NavbarItem>
-          <NavLink to={ROUTES.Players}>{t("menu.players")}</NavLink>
+          <NavLink
+            className={({ isActive }) => (isActive ? "link-active" : "")}
+            to={ROUTES.Players}
+          >
+            {t("menu.players")}
+          </NavLink>
+        </NavbarItem>
+        <NavbarItem>
+          <NavLink
+            className={({ isActive }) => (isActive ? "link-active" : "")}
+            to={ROUTES.Locations}
+          >
+            {t("menu.locations")}
+          </NavLink>
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href={ROUTES.Matches}>
@@ -94,7 +105,12 @@ const Header = (props: IHeaderComponentProps) => {
               <DropdownItem key="settings">{t("buttons.settings")}</DropdownItem>
             </DropdownSection>
             <DropdownSection title="Actions">
-              <DropdownItem key="logout" color="danger" className="text-danger">
+              <DropdownItem
+                key="logout"
+                color="danger"
+                className="text-danger"
+                onClick={handleLogout}
+              >
                 {t("buttons.logout")}
               </DropdownItem>
             </DropdownSection>
@@ -102,17 +118,10 @@ const Header = (props: IHeaderComponentProps) => {
         </Dropdown>
       </NavbarContent>
       <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              className="w-full"
-              color={
-                index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"
-              }
-              href="#"
-              size="lg"
-            >
-              {item}
+        {Object.entries(ROUTES).map(([key, value], index) => (
+          <NavbarMenuItem key={value}>
+            <Link className="w-full" href="#" size="lg">
+              {key}
             </Link>
           </NavbarMenuItem>
         ))}
