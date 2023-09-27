@@ -1,4 +1,4 @@
-import {nextui} from "@nextui-org/react";
+import { nextui } from "@nextui-org/react";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -7,7 +7,30 @@ export default {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        toastIn: "toastIn .5s both",
+        toastOut: "toastOut .5s both",
+      },
+      keyframes: {
+        toastIn: {
+          "0%": {
+            transform: "translate(2000px) scale(0.7)",
+            opacity: 0.7,
+          },
+          "80%": { transform: "translate(0px) scale(0.7)", opacity: 0.7 },
+          "100%": { transform: "scale(1)", opacity: 1 },
+        },
+        toastOut: {
+          "0%": { transform: "scale(1)", opacity: 1 },
+          "20%": { transform: "translate(0px) scale(0.7)", opacity: 0.7 },
+          "100%": {
+            transform: "translate(2000px) scale(0.7)",
+            opacity: 0.7,
+          },
+        },
+      },
+    },
   },
   darkMode: "class",
   plugins: [
