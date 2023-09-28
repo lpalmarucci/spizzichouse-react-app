@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Link,
@@ -9,6 +9,9 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Tab,
+  Tabs,
+  User,
 } from "@nextui-org/react";
 
 import {
@@ -21,7 +24,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { ROUTES } from "../routes/common.routes";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useSignOut } from "react-auth-kit";
+import { useSignOut, useAuthUser } from "react-auth-kit";
+import { getInitialLetters } from "../shared/utils";
 
 interface IHeaderComponentProps {}
 
@@ -29,7 +33,9 @@ const Header = (props: IHeaderComponentProps) => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const signOut = useSignOut();
+  const auth = useAuthUser();
   const navigate = useNavigate();
+  const [selectedKey, setSelectedKey] = useState<string>(window.location.pathname);
 
   function handleLogout() {
     if (signOut()) {
@@ -47,63 +53,38 @@ const Header = (props: IHeaderComponentProps) => {
           className="font-bold text-inherit cursor-pointer"
           onClick={() => navigate(ROUTES.Dashboard)}
         >
-          SPIZZICHOUSE
+          {t("appName").toUpperCase()}
         </p>
       </NavbarBrand>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive={window.location.pathname === ROUTES.Dashboard}>
-          <NavLink
-            to={ROUTES.Dashboard}
-            color="primary"
-            className={({ isActive }) => (isActive ? "link-active" : "")}
-          >
-            {t("menu.dashboard")}
-          </NavLink>
-        </NavbarItem>
-        <NavbarItem>
-          <NavLink
-            className={({ isActive }) => (isActive ? "link-active" : "")}
-            to={ROUTES.Players}
-          >
-            {t("menu.players")}
-          </NavLink>
-        </NavbarItem>
-        <NavbarItem>
-          <NavLink
-            className={({ isActive }) => (isActive ? "link-active" : "")}
-            to={ROUTES.Locations}
-          >
-            {t("menu.locations")}
-          </NavLink>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href={ROUTES.Matches}>
-            {t("menu.matches")}
-          </Link>
-        </NavbarItem>
+        <Tabs
+          variant="light"
+          size="lg"
+          selectedKey={selectedKey}
+          onSelectionChange={(key) => {
+            setSelectedKey(key.toString());
+            navigate(key.toString());
+          }}
+        >
+          <Tab key={ROUTES.Dashboard} title={t("menu.dashboard")} />
+          <Tab key={ROUTES.Players} title={t("menu.players")} />
+        </Tabs>
       </NavbarContent>
 
       <NavbarContent as="div" justify="end">
         <Dropdown placement="bottom-end" showArrow>
           <DropdownTrigger>
-            <Avatar
-              isBordered
-              as="button"
-              className="transition-transform"
-              name="Jason Hughes"
-              size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+            <User
+              name={`${auth()?.firstname} ${auth()?.lastname}`}
+              description={`@${auth()?.username}`}
+              className="cursor-pointer"
+              avatarProps={{
+                name: getInitialLetters(auth()?.firstname, auth()?.lastname),
+              }}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions">
-            <DropdownSection title="User" showDivider>
-              <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">{t("buttons.signInAs")}</p>
-                <p className="font-semibold">zoey@example.com</p>
-              </DropdownItem>
-              <DropdownItem key="settings">{t("buttons.settings")}</DropdownItem>
-            </DropdownSection>
             <DropdownSection title="Actions">
               <DropdownItem
                 key="logout"
