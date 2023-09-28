@@ -1,12 +1,8 @@
 import { Button, CardFooter, Card } from "@nextui-org/react";
-import React from "react";
 import { Player } from "../models/Player";
 import { motion } from "framer-motion";
-import { fadeIn, fadeOut, fadeVariant } from "../costants/animation";
-
-function getInitialLetters(firstName: string, lastName: string) {
-  return firstName.slice(0, 1).toUpperCase() + lastName.slice(0, 1).toUpperCase();
-}
+import { fadeVariant } from "../costants/animation";
+import { getInitialLetters } from "../shared/utils";
 
 const PlayerCard = (props: Player) => {
   return (

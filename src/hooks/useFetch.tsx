@@ -3,11 +3,12 @@ import { ApiError } from "../models/ApiError";
 import { useIsAuthenticated } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/common.routes";
+import { useToast } from "../context/Toast.context";
 
 export default function useFetch() {
   const navigate = useNavigate();
   const auth = useAuthUser();
-  console.log(auth());
+  const { add } = useToast();
 
   async function fetchData<T>(
     url: string,
@@ -32,7 +33,10 @@ export default function useFetch() {
 
     const data = (await response.json()) as T | ApiError;
 
-    if (isResponseError(data)) return Promise.reject(data as ApiError);
+    if (isResponseError(data)) {
+      add({ message: data.message, type: "error" });
+      return Promise.reject(data as ApiError);
+    }
 
     return Promise.resolve(data);
   }

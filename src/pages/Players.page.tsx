@@ -14,11 +14,7 @@ const PlayersPage = () => {
   const fetchData = useFetch();
 
   useEffect(() => {
-    fetchData<Player[]>(ApiEndpoint.getPlayers, "get")
-      .then((data) => setPlayers(data))
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchData<Player[]>(ApiEndpoint.getPlayers, "get").then((data) => setPlayers(data));
   }, []);
 
   return (

@@ -20,25 +20,22 @@ const LoginPage = (props: Props) => {
   const [password, setPassword] = useState<string>("");
   const fetchData = useFetch();
   const navigate = useNavigate();
-  const { add } = useToast();
 
   function handleLogin() {
     fetchData<LoginResponse>(ApiEndpoint.login, "post", {
       body: JSON.stringify({ username, password }),
-    })
-      .then((data) => {
-        if (
-          signIn({
-            token: data.access_token,
-            tokenType: "Bearer",
-            authState: data,
-            expiresIn: 1695939469,
-          })
-        ) {
-          navigate("/");
-        }
-      })
-      .catch((error: ApiError) => add({ message: error.message, type: "error" }));
+    }).then((data) => {
+      if (
+        signIn({
+          token: data.access_token,
+          tokenType: "Bearer",
+          authState: data,
+          expiresIn: 1695939469,
+        })
+      ) {
+        navigate("/");
+      }
+    });
   }
 
   return (
