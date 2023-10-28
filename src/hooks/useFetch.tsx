@@ -1,5 +1,5 @@
 import { useAuthUser } from "react-auth-kit";
-import { ApiError } from "../models/ApiError";
+import { ApiError } from "../models/Api";
 import { useIsAuthenticated } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/common.routes";

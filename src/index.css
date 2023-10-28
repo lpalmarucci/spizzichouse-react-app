@@ -30,3 +30,8 @@
   text-decoration: underline;
   @apply font-semibold text-[color:var(--spizzi-primary-500)];
 }
+
+form:invalid > #submit {
+  pointer-events: none;
+  cursor: blocked;
+}

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Title from "../components/Title.component";
 import { useSignIn } from "react-auth-kit";
-import { ApiError } from "../models/ApiError";
+import { ApiError } from "../models/Api";
 import useFetch from "../hooks/useFetch";
 import { useToast } from "../context/Toast.context";
 import { LoginResponse } from "../models/Login";

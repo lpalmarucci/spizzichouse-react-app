@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  Avatar,
   Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
@@ -23,7 +21,7 @@ import {
 } from "@nextui-org/dropdown";
 import { useTranslation } from "react-i18next";
 import { ROUTES } from "../routes/common.routes";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSignOut, useAuthUser } from "react-auth-kit";
 import { getInitialLetters } from "../shared/utils";
 
@@ -43,8 +41,12 @@ const Header = (props: IHeaderComponentProps) => {
     }
   }
 
+  useEffect(() => {
+    setSelectedKey(window.location.pathname);
+  }, [window.location.pathname]);
+
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} className={"bg-inherit"}>
+    <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen}>
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
@@ -98,7 +100,7 @@ const Header = (props: IHeaderComponentProps) => {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-      <NavbarMenu>
+      <NavbarMenu className={"bg-inherit"}>
         {Object.entries(ROUTES).map(([key, value], index) => (
           <NavbarMenuItem key={value}>
             <Link className="w-full" href="#" size="lg">

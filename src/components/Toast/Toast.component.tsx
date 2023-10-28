@@ -16,6 +16,8 @@ const Toast = (props: ToastProps) => {
     dismissRef.current = setTimeout(() => {
       remove(id, wrapperRef);
     }, duration);
+
+    return () => clearTimeout(dismissRef.current);
   });
 
   return (
