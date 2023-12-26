@@ -31,7 +31,7 @@ export const wrapperClasses: Record<RequiredToastProps["type"], string> = {
   info: "bg-blue-100 dark:bg-blue-700 dark:text-blue-100",
   success: "bg-green-100 dark:bg-green-700 dark:text-green-100",
   warning: "bg-orange-100 dark:bg-orange-700 dark:text-orange-100",
-  error: "dark:bg-red-100 bg-red-700/70 text-white",
+  error: "dark:bg-red-100 bg-red-500/70 text-white",
 };
 
 // export const iconClasses: Record<RequiredToastProps["type"], string> = {
