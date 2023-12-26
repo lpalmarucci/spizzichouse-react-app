@@ -1,20 +1,29 @@
-import React, { useEffect, useRef } from "react";
-import { ToastProps, closeButtonClasses, closeIcon, getIcon, wrapperClasses } from "./utils";
-import { useToast } from "../../context/Toast.context";
+import { useEffect, useRef } from 'react';
+import {
+  closeButtonClasses,
+  closeIcon,
+  ToastProps,
+  wrapperClasses,
+} from './utils';
+import { useToast } from '../../context/Toast.context';
 
 const Toast = (props: ToastProps) => {
-  let { id, type = "info", icon = "", message = "---", duration = 2000 } = props;
-  icon = icon === "" ? getIcon(type) : icon;
+  const {
+    id,
+    type = 'info',
+    // icon = '',
+    message = '---',
+    duration = 5000,
+  } = props;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const { remove } = useToast();
+  const { removeAlertMessage } = useToast();
 
   //auto dismiss
-
   const dismissRef = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => {
     dismissRef.current = setTimeout(() => {
-      remove(id, wrapperRef);
+      removeAlertMessage(id, wrapperRef);
     }, duration);
   });
 
@@ -29,7 +38,7 @@ const Toast = (props: ToastProps) => {
       <button
         className={closeButtonClasses}
         aria-label="close"
-        onClick={() => remove(id, wrapperRef)}
+        onClick={() => removeAlertMessage(id, wrapperRef)}
       >
         <span className="sr-only">Close</span>
         {closeIcon}
