@@ -51,9 +51,6 @@ export default function PlayersPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Player[]>([]);
   const [filterValue, setFilterValue] = React.useState('');
-  const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
-    new Set([]),
-  );
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
@@ -247,11 +244,6 @@ export default function PlayersPage() {
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === 'all'
-            ? 'All items selected'
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span>
         <Pagination
           showControls
           showShadow
@@ -262,7 +254,7 @@ export default function PlayersPage() {
         />
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [items.length, page, pages, hasSearchFilter]);
 
   return (
     <div className="flex flex-col items-center align-middle mx-auto w-full px-6 max-w-7xl">
@@ -274,13 +266,11 @@ export default function PlayersPage() {
         classNames={{
           wrapper: 'max-h-[420px]',
         }}
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
+        color="primary"
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
