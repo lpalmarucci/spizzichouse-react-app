@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Dropdown,
@@ -9,6 +9,7 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -23,59 +24,29 @@ import { SearchIcon } from '../icons/SearchIcon.tsx';
 import { ChevronDownIcon } from '../icons/ChevronDownIcon.tsx';
 import { capitalize } from '../shared/utils.tsx';
 import { Player } from '../models/Player.ts';
+import { ApiEndpoint } from '../models/constants.ts';
+import useFetch from '../hooks/useFetch.tsx';
 
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
-  { name: 'NAME', uid: 'name', sortable: true },
-  { name: 'AGE', uid: 'age', sortable: true },
-  { name: 'ROLE', uid: 'role', sortable: true },
-  { name: 'TEAM', uid: 'team' },
-  { name: 'EMAIL', uid: 'email' },
+  { name: 'USERNAME', uid: 'username', sortable: true },
+  { name: 'FIRSTNAME', uid: 'firstname', sortable: true },
+  { name: 'LASTNAME', uid: 'lastname', sortable: true },
   { name: 'ACTIONS', uid: 'actions' },
 ];
 
-const users = [
-  {
-    id: 1,
-    name: 'Tony Reichert',
-    role: 'CEO',
-    team: 'Management',
-    age: '29',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
-    email: 'tony.reichert@example.com',
-  },
-  {
-    id: 2,
-    name: 'Zoey Lang',
-    role: 'Tech Lead',
-    team: 'Development',
-    age: '25',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-    email: 'zoey.lang@example.com',
-  },
-  {
-    id: 3,
-    name: 'Jane Fisher',
-    role: 'Sr. Dev',
-    team: 'Development',
-    age: '22',
-    avatar: 'https://i.pravatar.cc/150?u=a04258114e29026702d',
-    email: 'jane.fisher@example.com',
-  },
-  {
-    id: 4,
-    name: 'William Howard',
-    role: 'C.M.',
-    team: 'Marketing',
-    age: '28',
-    avatar: 'https://i.pravatar.cc/150?u=a048581f4e29026701d',
-    email: 'william.howard@example.com',
-  },
+const INITIAL_VISIBLE_COLUMNS = [
+  'id',
+  'firstname',
+  'lastname',
+  'username',
+  'actions',
 ];
-const INITIAL_VISIBLE_COLUMNS = ['name', 'role', 'actions'];
 
 export default function PlayersPage() {
-  const [players, setPlayers] = useState<Player[]>([]);
+  const fetchData = useFetch();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [users, setUsers] = useState<Player[]>([]);
   const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([]),
@@ -85,7 +56,7 @@ export default function PlayersPage() {
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: 'age',
+    column: 'id',
     direction: 'ascending',
   });
 
@@ -106,7 +77,7 @@ export default function PlayersPage() {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+        user.username.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
@@ -168,18 +139,6 @@ export default function PlayersPage() {
     }
   }, []);
 
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
-
   const onRowsPerPageChange = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
@@ -212,7 +171,7 @@ export default function PlayersPage() {
             placeholder="Search by name..."
             startContent={<SearchIcon />}
             value={filterValue}
-            onClear={() => onClear()}
+            onClear={onClear}
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
@@ -272,6 +231,12 @@ export default function PlayersPage() {
     hasSearchFilter,
   ]);
 
+  useEffect(() => {
+    fetchData<Player[]>(ApiEndpoint.getUsers, 'get')
+      .then((data) => setUsers(data))
+      .finally(() => setIsLoading(false));
+  }, []);
+
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
@@ -281,7 +246,6 @@ export default function PlayersPage() {
             : `${selectedKeys.size} of ${filteredItems.length} selected`}
         </span>
         <Pagination
-          isCompact
           showControls
           showShadow
           color="primary"
@@ -289,24 +253,6 @@ export default function PlayersPage() {
           total={pages}
           onChange={setPage}
         />
-        <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onPreviousPage}
-          >
-            Previous
-          </Button>
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onNextPage}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
@@ -340,7 +286,12 @@ export default function PlayersPage() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={'No users found'} items={sortedItems}>
+        <TableBody
+          emptyContent={'No users found'}
+          items={sortedItems}
+          isLoading={isLoading}
+          loadingContent={<Spinner label="Loading..." />}
+        >
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
