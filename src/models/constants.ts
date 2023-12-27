@@ -1,4 +1,4 @@
 export const ApiEndpoint = {
-  getPlayers: "/users",
-  login: "/auth/login",
+  getUsers: '/users',
+  login: '/auth/login',
 };
