@@ -6,5 +6,5 @@ export const ApiEndpoint = {
   getSingleUser: '/users/:id',
   createUser: '/users',
   updateUser: '/users/:id',
-  deleteUSer: '/users/:id',
+  deleteUser: '/users/:id',
 };

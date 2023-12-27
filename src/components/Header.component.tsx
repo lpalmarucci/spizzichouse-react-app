@@ -83,7 +83,7 @@ const Header = () => {
       </NavbarContent>
 
       <NavbarContent as="div" className="invisible sm:visible" justify="end">
-        <Dropdown placement="bottom-end">
+        <Dropdown placement="bottom-end" showArrow>
           <DropdownTrigger>
             <User
               name={`${userData?.firstname} ${userData?.lastname}`}

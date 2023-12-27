@@ -18,12 +18,14 @@ import { useToast } from '../../context/Toast.context.tsx';
 interface ICreateEditUserProps {
   user?: Player;
   isOpen: boolean;
-  onCloseDialog: (op: boolean) => void;
+  onOpenChange: () => void;
+  onCloseDialog?: () => void;
 }
 
 function CreateEditUserDialogComponent({
   isOpen,
   user,
+  onOpenChange,
   onCloseDialog,
 }: ICreateEditUserProps) {
   const fetchData = useFetch();
@@ -51,7 +53,6 @@ function CreateEditUserDialogComponent({
       setUsername('');
       setPassword('');
       showAlertMessage({ message: successMessage, type: 'success' });
-      onCloseDialog(true);
     });
   };
 
@@ -74,9 +75,9 @@ function CreateEditUserDialogComponent({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => onCloseDialog(false)}
       placement="auto"
       size="xl"
+      onOpenChange={onOpenChange}
     >
       <ModalContent>
         {(onClose) => (
@@ -133,11 +134,12 @@ function CreateEditUserDialogComponent({
                 color="primary"
                 onPress={async () => {
                   await handleSaveUser();
+                  if (onCloseDialog) onCloseDialog();
                   onClose();
                 }}
                 isDisabled={!isFormValid}
               >
-                Add
+                {user ? 'Save' : 'Add'}
               </Button>
             </ModalFooter>
           </>

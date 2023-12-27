@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
+  useDisclosure,
 } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { SearchIcon } from '../icons/SearchIcon.tsx';
@@ -28,13 +29,15 @@ import useFetch from '../hooks/useFetch.tsx';
 import CreateEditUserDialogComponent from '../components/Players/CreateEditUserDialog.component.tsx';
 import EditIcon from '../icons/EditIcon.tsx';
 import { DeleteIcon } from '../icons/DeleteIcon.tsx';
+import { useToast } from '../context/Toast.context.tsx';
+import AlertDialog from '../components/AlertDialog.component.tsx';
 
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
-  { name: 'USERNAME', uid: 'username', sortable: true },
-  { name: 'FIRSTNAME', uid: 'firstname', sortable: true },
-  { name: 'LASTNAME', uid: 'lastname', sortable: true },
-  { name: 'ACTIONS', uid: 'actions' },
+  { name: 'Username', uid: 'username', sortable: true },
+  { name: 'Firstname', uid: 'firstname', sortable: true },
+  { name: 'Lastname', uid: 'lastname', sortable: true },
+  { name: 'Actions', uid: 'actions' },
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -47,7 +50,13 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 export default function PlayersPage() {
   const fetchData = useFetch();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { showAlertMessage } = useToast();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isOpenAlertDialog,
+    onOpen: onOpenAlertDialog,
+    onOpenChange: onOpenChangeAlertDialog,
+  } = useDisclosure();
   const [currentUser, setCurrentUser] = useState<Player | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Player[]>([]);
@@ -104,8 +113,6 @@ export default function PlayersPage() {
     return sortedItems.slice(start, end);
   }, [page, sortedItems, rowsPerPage]);
 
-  console.log({ items });
-
   const renderCell = React.useCallback((user: Player, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof Player];
 
@@ -118,13 +125,19 @@ export default function PlayersPage() {
                 <EditIcon
                   onClick={() => {
                     setCurrentUser(user);
+                    onOpen();
                   }}
                 />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete user" closeDelay={0}>
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
+                <DeleteIcon
+                  onClick={() => {
+                    setCurrentUser(user);
+                    onOpenAlertDialog();
+                  }}
+                />
               </span>
             </Tooltip>
           </div>
@@ -202,7 +215,7 @@ export default function PlayersPage() {
               color="primary"
               onPress={() => {
                 setCurrentUser(undefined);
-                setIsModalOpen(true);
+                onOpen();
               }}
               endContent={<PlusIcon />}
             >
@@ -238,18 +251,29 @@ export default function PlayersPage() {
   ]);
 
   const getUserData = () => {
-    fetchData<Player[]>(ApiEndpoint.getUsers, 'get')
+    fetchData<Player[]>(ApiEndpoint.getUsers, 'GET')
       .then((data) => setUsers(data))
       .finally(() => setIsLoading(false));
+  };
+
+  const handleDeleteUser = async () => {
+    if (!currentUser) return;
+    const { id } = currentUser;
+    const url = ApiEndpoint.deleteUser.replace(':id', id.toString());
+    setIsLoading(true);
+    const deleteResult = await fetchData<Player>(url, 'DELETE');
+    if (deleteResult.id)
+      showAlertMessage({
+        message: 'User delete successfully',
+        type: 'success',
+      });
+    setIsLoading(false);
+    getUserData();
   };
 
   useEffect(() => {
     getUserData();
   }, []);
-
-  useEffect(() => {
-    if (currentUser) setIsModalOpen(true);
-  }, [currentUser]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -306,12 +330,20 @@ export default function PlayersPage() {
         </TableBody>
       </Table>
       <CreateEditUserDialogComponent
-        isOpen={isModalOpen}
-        onCloseDialog={(op: boolean) => {
-          op && getUserData();
-          setIsModalOpen(false);
-        }}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onCloseDialog={getUserData}
         user={currentUser}
+      />
+      <AlertDialog
+        isOpen={isOpenAlertDialog}
+        onOpenChange={onOpenChangeAlertDialog}
+        onConfirm={handleDeleteUser}
+        contentText={
+          <div className="flex gap-1">
+            Are you sure you want to delete <b>{currentUser?.username}</b> ?
+          </div>
+        }
       />
     </div>
   );
