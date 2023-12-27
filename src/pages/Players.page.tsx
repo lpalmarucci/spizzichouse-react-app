@@ -231,26 +231,27 @@ export default function PlayersPage() {
     hasSearchFilter,
   ]);
 
-  const fetchUserData = () => {
+  const getUserData = () => {
     fetchData<Player[]>(ApiEndpoint.getUsers, 'get')
       .then((data) => setUsers(data))
       .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
-    fetchUserData();
+    getUserData();
   }, []);
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="py-2 px-2 flex justify-center items-center">
         <Pagination
-          showControls
+          isCompact
           showShadow
           color="primary"
           page={page}
           total={pages}
           onChange={setPage}
+          hidden={items.length === 0}
         />
       </div>
     );
@@ -301,7 +302,7 @@ export default function PlayersPage() {
       <CreateEditUserDialogComponent
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        onCloseDialog={fetchUserData}
+        onCloseDialog={getUserData}
       />
     </div>
   );
