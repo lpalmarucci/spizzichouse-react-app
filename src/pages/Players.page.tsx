@@ -16,11 +16,9 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  useDisclosure,
-  User,
+  Tooltip,
 } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
-import { VerticalDotsIcon } from '../icons/VerticalDotsIcon.tsx';
 import { SearchIcon } from '../icons/SearchIcon.tsx';
 import { ChevronDownIcon } from '../icons/ChevronDownIcon.tsx';
 import { capitalize } from '../shared/utils.tsx';
@@ -28,6 +26,8 @@ import { Player } from '../models/Player.ts';
 import { ApiEndpoint } from '../models/constants.ts';
 import useFetch from '../hooks/useFetch.tsx';
 import CreateEditUserDialogComponent from '../components/Players/CreateEditUserDialog.component.tsx';
+import EditIcon from '../icons/EditIcon.tsx';
+import { DeleteIcon } from '../icons/DeleteIcon.tsx';
 
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
@@ -47,7 +47,8 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 export default function PlayersPage() {
   const fetchData = useFetch();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<Player | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Player[]>([]);
   const [filterValue, setFilterValue] = React.useState('');
@@ -86,52 +87,46 @@ export default function PlayersPage() {
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
-
   const sortedItems = React.useMemo<Player[]>(() => {
-    return [...items].sort((a: Player, b: Player) => {
+    return [...filteredItems].sort((a: Player, b: Player) => {
       const first = a[sortDescriptor.column as keyof Player] as number;
       const second = b[sortDescriptor.column as keyof Player] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === 'descending' ? -cmp : cmp;
     });
-  }, [sortDescriptor, items]);
+  }, [sortDescriptor, filteredItems]);
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return sortedItems.slice(start, end);
+  }, [page, sortedItems, rowsPerPage]);
+
+  console.log({ items });
 
   const renderCell = React.useCallback((user: Player, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof Player];
 
     switch (columnKey) {
-      case 'name':
-        return (
-          <User
-            // avatarProps={{ radius: 'lg', src: user.avatar }}
-            description={user.username}
-            name={cellValue.toString() ?? user.firstname}
-          >
-            {user.firstname} {user.lastname}
-          </User>
-        );
       case 'actions':
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="relative flex items-center gap-4">
+            <Tooltip content="Edit user" closeDelay={0}>
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <EditIcon
+                  onClick={() => {
+                    setCurrentUser(user);
+                  }}
+                />
+              </span>
+            </Tooltip>
+            <Tooltip color="danger" content="Delete user" closeDelay={0}>
+              <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                <DeleteIcon />
+              </span>
+            </Tooltip>
           </div>
         );
       default:
@@ -193,13 +188,24 @@ export default function PlayersPage() {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
+                  <DropdownItem
+                    key={column.uid}
+                    className="capitalize"
+                    isDisabled={['id', 'actions'].includes(column.uid)}
+                  >
                     {capitalize(column.name)}
                   </DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" onPress={onOpen} endContent={<PlusIcon />}>
+            <Button
+              color="primary"
+              onPress={() => {
+                setCurrentUser(undefined);
+                setIsModalOpen(true);
+              }}
+              endContent={<PlusIcon />}
+            >
               Add New
             </Button>
           </div>
@@ -241,6 +247,10 @@ export default function PlayersPage() {
     getUserData();
   }, []);
 
+  useEffect(() => {
+    if (currentUser) setIsModalOpen(true);
+  }, [currentUser]);
+
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-center items-center">
@@ -275,18 +285,14 @@ export default function PlayersPage() {
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === 'actions' ? 'center' : 'start'}
-              allowsSorting={column.sortable}
-            >
+            <TableColumn key={column.uid} allowsSorting={column.sortable}>
               {column.name}
             </TableColumn>
           )}
         </TableHeader>
         <TableBody
           emptyContent={'No users found'}
-          items={sortedItems}
+          items={items}
           isLoading={isLoading}
           loadingContent={<Spinner label="Loading..." />}
         >
@@ -300,9 +306,12 @@ export default function PlayersPage() {
         </TableBody>
       </Table>
       <CreateEditUserDialogComponent
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        onCloseDialog={getUserData}
+        isOpen={isModalOpen}
+        onCloseDialog={(op: boolean) => {
+          op && getUserData();
+          setIsModalOpen(false);
+        }}
+        user={currentUser}
       />
     </div>
   );

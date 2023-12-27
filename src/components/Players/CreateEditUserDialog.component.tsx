@@ -9,7 +9,7 @@ import {
 } from '@nextui-org/react';
 import LockIcon from '../../icons/LockIcon.tsx';
 import { TagUserLinearIcon } from '../../icons/TagUserIcon.tsx';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Player } from '../../models/Player.ts';
 import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
@@ -18,43 +18,65 @@ import { useToast } from '../../context/Toast.context.tsx';
 interface ICreateEditUserProps {
   user?: Player;
   isOpen: boolean;
-  onOpenChange: () => void;
-  onCloseDialog: () => void;
+  onCloseDialog: (op: boolean) => void;
 }
 
 function CreateEditUserDialogComponent({
   isOpen,
-  onOpenChange,
   user,
   onCloseDialog,
 }: ICreateEditUserProps) {
   const fetchData = useFetch();
-  const [firstname, setFirstname] = useState(user?.firstname ?? '');
-  const [lastname, setLastname] = useState(user?.lastname ?? '');
-  const [username, setUsername] = useState(user?.username ?? '');
-  const [password, setPassword] = useState(user?.password ?? '');
+  const [firstname, setFirstname] = useState<string>('');
+  const [lastname, setLastname] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const { showAlertMessage } = useToast();
   const handleSaveUser = () => {
-    console.log({ user });
-    const url = user ? ApiEndpoint.updateUser : ApiEndpoint.createUser;
-    const method = user ? 'patch' : 'post';
+    const url = user
+      ? ApiEndpoint.updateUser.replace(':id', user.id.toString())
+      : ApiEndpoint.createUser;
+    const method = user ? 'PATCH' : 'POST';
     const successMessage = user
       ? `User ${user.username} saved successfully`
       : 'User created successfully';
+    const body = user
+      ? { firstname, lastname, username }
+      : { firstname, lastname, username, password };
     return fetchData(url, method, {
-      body: JSON.stringify({ firstname, lastname, username, password }),
+      body: JSON.stringify(body),
     }).then(() => {
+      setFirstname('');
+      setLastname('');
+      setUsername('');
+      setPassword('');
       showAlertMessage({ message: successMessage, type: 'success' });
-      onCloseDialog();
+      onCloseDialog(true);
     });
   };
+
+  const isFormValid = React.useMemo<boolean>(
+    () =>
+      user
+        ? Boolean(firstname && lastname && username)
+        : Boolean(firstname && lastname && username && password),
+    [firstname, lastname, username, password],
+  );
+
+  useEffect(() => {
+    if (user) {
+      setFirstname(user.firstname);
+      setLastname(user.lastname);
+      setUsername(user.username);
+    }
+  }, [user]);
 
   return (
     <Modal
       isOpen={isOpen}
-      onOpenChange={onOpenChange}
+      onClose={() => onCloseDialog(false)}
       placement="auto"
-      size="lg"
+      size="xl"
     >
       <ModalContent>
         {(onClose) => (
@@ -69,12 +91,14 @@ function CreateEditUserDialogComponent({
                   label="Firstname"
                   placeholder="Enter the firstname"
                   variant="bordered"
+                  value={firstname}
                   onChange={(e) => setFirstname(e.target.value)}
                 />
                 <Input
                   label="Lastname"
                   placeholder="Enter the lastname"
                   variant="bordered"
+                  value={lastname}
                   onChange={(e) => setLastname(e.target.value)}
                 />
               </div>
@@ -85,9 +109,11 @@ function CreateEditUserDialogComponent({
                 label="Username"
                 placeholder="Enter your username"
                 variant="bordered"
+                value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
               <Input
+                className={user ? 'hidden' : ''}
                 endContent={
                   <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                 }
@@ -95,6 +121,7 @@ function CreateEditUserDialogComponent({
                 placeholder="Enter your password"
                 type="password"
                 variant="bordered"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </ModalBody>
@@ -108,6 +135,7 @@ function CreateEditUserDialogComponent({
                   await handleSaveUser();
                   onClose();
                 }}
+                isDisabled={!isFormValid}
               >
                 Add
               </Button>

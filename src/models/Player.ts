@@ -3,6 +3,7 @@ export type Player = {
   firstname: string;
   lastname: string;
   username: string;
-  password: string;
+  createdAt: string;
+  updatedAt: string;
   location: Location;
 };
