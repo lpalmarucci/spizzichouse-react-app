@@ -1,14 +1,12 @@
-export type ChevronDownIconProps = {
-  strokeWidth?: number;
-  size?: number;
-} & React.SVGProps<SVGSVGElement>;
+import { IIconProps } from './types.ts';
+
 export const ChevronDownIcon = ({
   strokeWidth = 1.5,
   size = 16,
   width,
   height,
   ...otherProps
-}: ChevronDownIconProps) => (
+}: IIconProps) => (
   <svg
     aria-hidden="true"
     fill="none"

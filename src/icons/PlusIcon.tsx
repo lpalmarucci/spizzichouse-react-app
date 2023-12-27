@@ -1,10 +1,11 @@
-export type PlusIconProps = { size?: number } & React.SVGProps<SVGSVGElement>;
+import { IIconProps } from './types.ts';
+
 export const PlusIcon = ({
   size = 24,
   width,
   height,
   ...props
-}: PlusIconProps) => (
+}: IIconProps) => (
   <svg
     aria-hidden="true"
     fill="none"

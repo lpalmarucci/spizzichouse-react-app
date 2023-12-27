@@ -1,12 +1,11 @@
-export type VerticalDotsIconProps = {
-  size?: number;
-} & React.SVGProps<SVGSVGElement>;
+import { IIconProps } from './types.ts';
+
 export const VerticalDotsIcon = ({
   size = 24,
   width,
   height,
   ...props
-}: VerticalDotsIconProps) => (
+}: IIconProps) => (
   <svg
     aria-hidden="true"
     fill="none"
