@@ -16,6 +16,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  useDisclosure,
   User,
 } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
@@ -26,6 +27,7 @@ import { capitalize } from '../shared/utils.tsx';
 import { Player } from '../models/Player.ts';
 import { ApiEndpoint } from '../models/constants.ts';
 import useFetch from '../hooks/useFetch.tsx';
+import CreateEditUserDialogComponent from '../components/Players/CreateEditUserDialog.component.tsx';
 
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
@@ -45,6 +47,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 export default function PlayersPage() {
   const fetchData = useFetch();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Player[]>([]);
   const [filterValue, setFilterValue] = React.useState('');
@@ -168,7 +171,7 @@ export default function PlayersPage() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Search by username..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={onClear}
@@ -199,7 +202,7 @@ export default function PlayersPage() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
+            <Button color="primary" onPress={onOpen} endContent={<PlusIcon />}>
               Add New
             </Button>
           </div>
@@ -231,10 +234,14 @@ export default function PlayersPage() {
     hasSearchFilter,
   ]);
 
-  useEffect(() => {
+  const fetchUserData = () => {
     fetchData<Player[]>(ApiEndpoint.getUsers, 'get')
       .then((data) => setUsers(data))
       .finally(() => setIsLoading(false));
+  };
+
+  useEffect(() => {
+    fetchUserData();
   }, []);
 
   const bottomContent = React.useMemo(() => {
@@ -301,6 +308,11 @@ export default function PlayersPage() {
           )}
         </TableBody>
       </Table>
+      <CreateEditUserDialogComponent
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onCloseDialog={fetchUserData}
+      />
     </div>
   );
 }
