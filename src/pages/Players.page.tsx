@@ -21,7 +21,6 @@ import {
 } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { SearchIcon } from '../icons/SearchIcon.tsx';
-import { ChevronDownIcon } from '../icons/ChevronDownIcon.tsx';
 import { capitalize } from '../shared/utils.tsx';
 import { Player } from '../models/Player.ts';
 import { ApiEndpoint } from '../models/constants.ts';
@@ -31,6 +30,7 @@ import EditIcon from '../icons/EditIcon.tsx';
 import { DeleteIcon } from '../icons/DeleteIcon.tsx';
 import { useToast } from '../context/Toast.context.tsx';
 import AlertDialog from '../components/AlertDialog.component.tsx';
+import { VerticalDotsIcon } from '../icons/VerticalDotsIcon.tsx';
 
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
@@ -183,13 +183,38 @@ export default function PlayersPage() {
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
+            <Button
+              color="primary"
+              onPress={() => {
+                setCurrentUser(undefined);
+                onOpen();
+              }}
+              endContent={<PlusIcon />}
+            >
+              Add New
+            </Button>
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-default-400 text-small">
+            Total {users.length} users
+          </span>
+          <div className="flex gap-0.5">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
             <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  variant="flat"
-                >
-                  Columns
+              <DropdownTrigger className="sm:flex">
+                <Button isIconOnly variant="light">
+                  <VerticalDotsIcon className="text-small" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -211,33 +236,7 @@ export default function PlayersPage() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button
-              color="primary"
-              onPress={() => {
-                setCurrentUser(undefined);
-                onOpen();
-              }}
-              endContent={<PlusIcon />}
-            >
-              Add New
-            </Button>
           </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
-            Total {users.length} users
-          </span>
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
         </div>
       </div>
     );
