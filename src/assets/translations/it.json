@@ -1,5 +1,6 @@
 {
   "appName": "Spizzichouse",
+  "loading": "Loading...",
   "menu": {
     "dashboard": "Dashboard",
     "players": "Giocatori",
@@ -7,7 +8,16 @@
     "locations": "Luoghi"
   },
   "players": {
-    "list": "Lista giocatori"
+    "list": "Lista giocatori",
+    "searchPlaceholder": "Search by username...",
+    "messages": {
+      "askDelete": "Are you sure you want to delete user {name}?",
+      "deleteSuccess": "User deleted successfully"
+    },
+    "tooltip": {
+      "deleteUser": "Delete user",
+      "editUser": "Edit user"
+    }
   },
   "locations": {
     "list": "Lista luoghi"
@@ -17,7 +27,11 @@
     "signup": "Registrati",
     "logout": "Logout",
     "settings": "Impostazioni",
-    "signInAs": "Entrato come"
+    "signInAs": "Entrato come",
+    "addNew": "Add new"
+  },
+  "emptyContent": {
+    "users": "No users found"
   },
   "label": {
     "username": "Username",

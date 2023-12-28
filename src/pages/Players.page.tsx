@@ -31,6 +31,7 @@ import { DeleteIcon } from '../icons/DeleteIcon.tsx';
 import { useToast } from '../context/Toast.context.tsx';
 import AlertDialog from '../components/AlertDialog.component.tsx';
 import { VerticalDotsIcon } from '../icons/VerticalDotsIcon.tsx';
+import { useTranslation } from 'react-i18next';
 
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
@@ -51,6 +52,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 export default function PlayersPage() {
   const fetchData = useFetch();
   const { showAlertMessage } = useToast();
+  const { t } = useTranslation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
     isOpen: isOpenAlertDialog,
@@ -120,7 +122,7 @@ export default function PlayersPage() {
       case 'actions':
         return (
           <div className="relative flex items-center gap-4">
-            <Tooltip content="Edit user" closeDelay={0}>
+            <Tooltip content={t('players.tooltip.editUser')} closeDelay={0}>
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon
                   onClick={() => {
@@ -130,7 +132,11 @@ export default function PlayersPage() {
                 />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user" closeDelay={0}>
+            <Tooltip
+              color="danger"
+              content={t('players.tooltip.deleteUser')}
+              closeDelay={0}
+            >
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon
                   onClick={() => {
@@ -176,7 +182,7 @@ export default function PlayersPage() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by username..."
+            placeholder={t('players.searchPlaceholder')}
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={onClear}
@@ -191,7 +197,7 @@ export default function PlayersPage() {
               }}
               endContent={<PlusIcon />}
             >
-              Add New
+              {t('buttons.addNew')}
             </Button>
           </div>
         </div>
@@ -268,7 +274,7 @@ export default function PlayersPage() {
     fetchData<Omit<Player, 'id'>>(url, 'DELETE')
       .then(() => {
         showAlertMessage({
-          message: 'User deleted successfully',
+          message: t('players.messages.deleteSuccess'),
           type: 'success',
         });
         getUserData();
@@ -299,7 +305,6 @@ export default function PlayersPage() {
   return (
     <div className="flex flex-col items-center align-middle mx-auto w-full px-6 max-w-7xl">
       <Table
-        aria-label="Example table with custom cells, pagination and sorting"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
@@ -320,10 +325,10 @@ export default function PlayersPage() {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={'No users found'}
+          emptyContent={t('emptyContent.users')}
           items={items}
           isLoading={isLoading}
-          loadingContent={<Spinner label="Loading..." />}
+          loadingContent={<Spinner label={t('loading')} />}
         >
           {(item) => (
             <TableRow key={item.id}>
@@ -346,7 +351,10 @@ export default function PlayersPage() {
         onConfirm={handleDeleteUser}
         contentText={
           <div className="flex gap-1">
-            Are you sure you want to delete <b>{currentUser?.username}</b> ?
+            {t('players.messages.askDelete').replace(
+              '{name}',
+              currentUser?.username ?? 'none',
+            )}
           </div>
         }
       />
