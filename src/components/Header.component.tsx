@@ -61,7 +61,10 @@ const Header = () => {
       <NavbarBrand>
         <p
           className="font-bold text-inherit cursor-pointer"
-          onClick={() => navigate(ROUTES.Dashboard)}
+          onClick={() => {
+            setSelectedKey(ROUTES.Dashboard);
+            navigate(ROUTES.Dashboard);
+          }}
         >
           {t('appName').toUpperCase()}
         </p>
