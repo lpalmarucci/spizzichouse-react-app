@@ -1,22 +1,21 @@
-import { Navigate, Outlet, RouteObject } from "react-router-dom";
-import Page from "../pages/Dashboard.page";
-import Header from "../components/Header.component";
-import DashboardPage from "../pages/Dashboard.page";
-import PlayersPage from "../pages/Players.page";
-import LocationsPage from "../pages/Locations.page";
-import LoginPage from "../pages/Login.page";
+import { Navigate, Outlet, RouteObject } from 'react-router-dom';
+import DashboardPage from '../pages/Dashboard.page';
+import Header from '../components/Header.component';
+import PlayersPage from '../pages/Players.page';
+import LocationsPage from '../pages/Locations.page';
+import LoginPage from '../pages/Login.page';
 
 export const ROUTES = {
-  Dashboard: "/dashboard",
-  Players: "/players",
-  Matches: "/matches",
-  Locations: "/locations",
-  Login: "/login",
+  Dashboard: '/dashboard',
+  Players: '/players',
+  Matches: '/matches',
+  Locations: '/locations',
+  Login: '/login',
 };
 
 const commonRoutes: RouteObject[] = [
   {
-    path: "",
+    path: '',
     element: (
       <main className="w-full h-[100dvh] dark text-foreground bg-background flex flex-col items-center justify-start">
         <Header />
@@ -27,29 +26,29 @@ const commonRoutes: RouteObject[] = [
     ),
     children: [
       {
-        path: "",
+        path: '',
         element: <Navigate to="/dashboard" />,
       },
       {
-        path: "dashboard",
+        path: 'dashboard',
         element: <DashboardPage />,
       },
       {
-        path: "locations",
+        path: 'locations',
         element: <LocationsPage />,
       },
       {
-        path: "players",
+        path: 'players',
         element: <PlayersPage />,
       },
     ],
   },
   {
-    path: "login",
+    path: 'login',
     element: <LoginPage />,
   },
   {
-    path: "**",
+    path: '**',
     element: <h1>404 Not found</h1>,
   },
 ];

@@ -1,41 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from 'react';
 import {
-  Avatar,
   Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
   Tab,
   Tabs,
   User,
-} from "@nextui-org/react";
+} from '@nextui-org/react';
 
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownTrigger,
   DropdownSection,
-} from "@nextui-org/dropdown";
-import { useTranslation } from "react-i18next";
-import { ROUTES } from "../routes/common.routes";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useSignOut, useAuthUser } from "react-auth-kit";
-import { getInitialLetters } from "../shared/utils";
+  DropdownTrigger,
+} from '@nextui-org/dropdown';
+import { useTranslation } from 'react-i18next';
+import { ROUTES } from '../routes/common.routes';
+import { useNavigate } from 'react-router-dom';
+import { useAuthUser, useSignOut } from 'react-auth-kit';
+import { getInitialLetters } from '../shared/utils';
 
-interface IHeaderComponentProps {}
-
-const Header = (props: IHeaderComponentProps) => {
+const Header = () => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const signOut = useSignOut();
-  const auth = useAuthUser();
+  const userData = useAuthUser()();
   const navigate = useNavigate();
-  const [selectedKey, setSelectedKey] = useState<string>(window.location.pathname);
+  const [selectedKey, setSelectedKey] = useState<string>(
+    window.location.pathname,
+  );
+
+  //If i don't have the user data, it means that i'm not logged in anymore
+  if (!userData) {
+    navigate(ROUTES.Login);
+    return;
+  }
 
   function handleLogout() {
     if (signOut()) {
@@ -44,16 +48,22 @@ const Header = (props: IHeaderComponentProps) => {
   }
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} className={"bg-inherit"}>
+    <Navbar
+      onMenuOpenChange={setIsMenuOpen}
+      isMenuOpen={isMenuOpen}
+      className="mb-0 sm:mb-10"
+    >
       <NavbarContent className="sm:hidden" justify="start">
-        <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+        />
       </NavbarContent>
       <NavbarBrand>
         <p
           className="font-bold text-inherit cursor-pointer"
           onClick={() => navigate(ROUTES.Dashboard)}
         >
-          {t("appName").toUpperCase()}
+          {t('appName').toUpperCase()}
         </p>
       </NavbarBrand>
 
@@ -67,20 +77,23 @@ const Header = (props: IHeaderComponentProps) => {
             navigate(key.toString());
           }}
         >
-          <Tab key={ROUTES.Dashboard} title={t("menu.dashboard")} />
-          <Tab key={ROUTES.Players} title={t("menu.players")} />
+          <Tab key={ROUTES.Dashboard} title={t('menu.dashboard')} />
+          <Tab key={ROUTES.Players} title={t('menu.players')} />
         </Tabs>
       </NavbarContent>
 
-      <NavbarContent as="div" justify="end">
+      <NavbarContent as="div" className="invisible sm:visible" justify="end">
         <Dropdown placement="bottom-end" showArrow>
           <DropdownTrigger>
             <User
-              name={`${auth()?.firstname} ${auth()?.lastname}`}
-              description={`@${auth()?.username}`}
+              name={`${userData?.firstname} ${userData?.lastname}`}
+              description={`@${userData?.username}`}
               className="cursor-pointer"
               avatarProps={{
-                name: getInitialLetters(auth()?.firstname, auth()?.lastname),
+                name: getInitialLetters(
+                  userData?.firstname,
+                  userData?.lastname,
+                ),
               }}
             />
           </DropdownTrigger>
@@ -92,14 +105,14 @@ const Header = (props: IHeaderComponentProps) => {
                 className="text-danger"
                 onClick={handleLogout}
               >
-                {t("buttons.logout")}
+                {t('buttons.logout')}
               </DropdownItem>
             </DropdownSection>
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
       <NavbarMenu>
-        {Object.entries(ROUTES).map(([key, value], index) => (
+        {Object.entries(ROUTES).map(([key, value]) => (
           <NavbarMenuItem key={value}>
             <Link className="w-full" href="#" size="lg">
               {key}
