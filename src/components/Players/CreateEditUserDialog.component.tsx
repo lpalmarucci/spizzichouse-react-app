@@ -40,7 +40,7 @@ function CreateEditUserDialogComponent({
       : ApiEndpoint.createUser;
     const method = user ? 'PATCH' : 'POST';
     const successMessage = user
-      ? `User ${user.username} saved successfully`
+      ? `User ${username} saved successfully`
       : 'User created successfully';
     const body = user
       ? { firstname, lastname, username }

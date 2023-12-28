@@ -251,7 +251,12 @@ export default function PlayersPage() {
 
   const getUserData = () => {
     fetchData<Player[]>(ApiEndpoint.getUsers, 'GET')
-      .then((data) => setUsers(data))
+      .then((data) => {
+        setUsers(data);
+        if (items.length === 1) setPage(1);
+        setCurrentUser(undefined);
+        setFilterValue('');
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -260,14 +265,15 @@ export default function PlayersPage() {
     const { id } = currentUser;
     const url = ApiEndpoint.deleteUser.replace(':id', id.toString());
     setIsLoading(true);
-    const deleteResult = await fetchData<Player>(url, 'DELETE');
-    if (deleteResult.id)
-      showAlertMessage({
-        message: 'User delete successfully',
-        type: 'success',
-      });
-    setIsLoading(false);
-    getUserData();
+    fetchData<Omit<Player, 'id'>>(url, 'DELETE')
+      .then(() => {
+        showAlertMessage({
+          message: 'User deleted successfully',
+          type: 'success',
+        });
+        getUserData();
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
