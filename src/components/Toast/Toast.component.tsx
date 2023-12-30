@@ -4,7 +4,7 @@ import {
   closeIcon,
   ToastProps,
   wrapperClasses,
-} from './utils';
+} from './types.tsx';
 import { useToast } from '../../context/Toast.context';
 
 const Toast = (props: ToastProps) => {

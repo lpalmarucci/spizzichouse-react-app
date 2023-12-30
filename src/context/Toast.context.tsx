@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, RefObject, useState } from 'react';
-import { positionClasses, ToastProps } from '../components/Toast/utils';
+import { positionClasses, ToastProps } from '../components/Toast/types.tsx';
 import Toast from '../components/Toast/Toast.component';
 
 export type ToastContextType = {
