@@ -8,7 +8,7 @@
     "locations": "Luoghi"
   },
   "players": {
-    "list": "Lista giocatori",
+    "title": "Lista giocatori",
     "searchPlaceholder": "Search by username...",
     "messages": {
       "askDelete": "Are you sure you want to delete user {name}?",
@@ -28,7 +28,8 @@
     "logout": "Logout",
     "settings": "Impostazioni",
     "signInAs": "Entrato come",
-    "addNew": "Add new"
+    "addNew": "Add new",
+    "darkMode": "Dark mode"
   },
   "emptyContent": {
     "users": "No users found"

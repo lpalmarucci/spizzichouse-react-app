@@ -303,7 +303,10 @@ export default function PlayersPage() {
   }, [items.length, page, pages, hasSearchFilter]);
 
   return (
-    <div className="flex flex-col items-center align-middle mx-auto w-full px-6 max-w-7xl">
+    <div className="flex flex-col gap-12 items-center align-middle mx-auto w-full px-6 max-w-7xl">
+      <h1 className="text-6xl text-foreground font-bold">
+        {t('players.title')}
+      </h1>
       <Table
         isHeaderSticky
         bottomContent={bottomContent}

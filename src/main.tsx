@@ -8,6 +8,7 @@ import { router } from './routes/index.ts';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AuthProvider } from 'react-auth-kit';
 import { ToastProvider } from './context/Toast.context.tsx';
+import { ThemeProvider } from './context/Theme.context.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -19,9 +20,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           cookieDomain={window.location.hostname}
           cookieSecure={window.location.protocol === 'https:'}
         >
-          <ToastProvider>
-            <RouterProvider router={router} />
-          </ToastProvider>
+          <ThemeProvider>
+            <ToastProvider>
+              <RouterProvider router={router} />
+            </ToastProvider>
+          </ThemeProvider>
         </AuthProvider>
       </NextUIProvider>
     </ErrorBoundary>

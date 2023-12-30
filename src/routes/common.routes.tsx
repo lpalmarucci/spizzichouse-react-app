@@ -17,7 +17,7 @@ const commonRoutes: RouteObject[] = [
   {
     path: '',
     element: (
-      <main className="w-full h-[100dvh] dark text-foreground bg-background flex flex-col items-center justify-start">
+      <main className="w-full h-[100dvh] flex flex-col items-center justify-start">
         <Header />
         <main className="relative w-full h-full">
           <Outlet />
