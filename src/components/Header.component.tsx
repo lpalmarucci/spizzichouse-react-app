@@ -7,6 +7,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Switch,
   Tab,
   Tabs,
   User,
@@ -24,6 +25,9 @@ import { ROUTES } from '../routes/common.routes';
 import { useNavigate } from 'react-router-dom';
 import { useAuthUser, useSignOut } from 'react-auth-kit';
 import { getInitialLetters } from '../shared/utils';
+import { useTheme } from '../context/Theme.context.tsx';
+import { SunIcon } from '../icons/SunIcon.tsx';
+import { MoonIcon } from '../icons/MoonIcon.tsx';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -31,6 +35,7 @@ const Header = () => {
   const signOut = useSignOut();
   const userData = useAuthUser()();
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const [selectedKey, setSelectedKey] = useState<string>(
     window.location.pathname,
   );
@@ -51,9 +56,12 @@ const Header = () => {
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
       isMenuOpen={isMenuOpen}
+      classNames={{
+        wrapper: 'max-w-7xl',
+      }}
       className="mb-0 sm:mb-10"
     >
-      <NavbarContent className="sm:hidden" justify="start">
+      <NavbarContent className="md:hidden" justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         />
@@ -70,7 +78,7 @@ const Header = () => {
         </p>
       </NavbarBrand>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden md:flex gap-4" justify="center">
         <Tabs
           variant="light"
           size="lg"
@@ -85,9 +93,13 @@ const Header = () => {
         </Tabs>
       </NavbarContent>
 
-      <NavbarContent as="div" className="invisible sm:visible" justify="end">
+      <NavbarContent
+        as="div"
+        className=" gap-0 md: gap-3 lg:gap-10"
+        justify="end"
+      >
         <Dropdown placement="bottom-end" showArrow>
-          <DropdownTrigger>
+          <DropdownTrigger className="hidden md:flex">
             <User
               name={`${userData?.firstname} ${userData?.lastname}`}
               description={`@${userData?.username}`}
@@ -113,11 +125,19 @@ const Header = () => {
             </DropdownSection>
           </DropdownMenu>
         </Dropdown>
+        <Switch
+          size="md"
+          color="primary"
+          isSelected={theme === 'dark'}
+          onChange={() => toggleTheme()}
+          startContent={<SunIcon />}
+          endContent={<MoonIcon />}
+        ></Switch>
       </NavbarContent>
       <NavbarMenu>
         {Object.entries(ROUTES).map(([key, value]) => (
           <NavbarMenuItem key={value}>
-            <Link className="w-full" href="#" size="lg">
+            <Link className="w-full" href={value} size="lg">
               {key}
             </Link>
           </NavbarMenuItem>
