@@ -152,10 +152,15 @@ export default function LocationsPage() {
             <div className="flex justify-start">
               <AvatarGroup isBordered max={2}>
                 {(cellValue as Player[]).map((player) => (
-                  <Avatar
-                    key={player.id}
-                    name={getInitialLetters(player.firstname, player.lastname)}
-                  />
+                  <Tooltip content={`${player.firstname} ${player.lastname}`}>
+                    <Avatar
+                      key={player.id}
+                      name={getInitialLetters(
+                        player.firstname,
+                        player.lastname,
+                      )}
+                    />
+                  </Tooltip>
                 ))}
               </AvatarGroup>
             </div>
