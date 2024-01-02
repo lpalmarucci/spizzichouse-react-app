@@ -82,8 +82,6 @@ function CreateEditLocationDialog({
     }
   }, [location]);
 
-  console.log({ selectedUsers });
-
   return (
     <Modal
       isOpen={isOpen}
