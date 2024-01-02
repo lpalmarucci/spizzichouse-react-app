@@ -24,11 +24,13 @@
     "searchPlaceholder": "Search by name...",
     "messages": {
       "askDelete": "Are you sure you want to delete location {name}?",
-      "deleteSuccess": "Location deleted successfully"
+      "deleteSuccess": "Location deleted successfully",
+      "creationSuccess": "Location created successfully",
+      "updateSuccess": "Location {name} saved successfully"
     },
     "tooltip": {
-      "deleteUser": "Delete location",
-      "editUser": "Edit location"
+      "deleteLocation": "Delete location",
+      "editLocation": "Edit location"
     }
   },
   "buttons": {
@@ -38,7 +40,10 @@
     "settings": "Impostazioni",
     "signInAs": "Entrato come",
     "addNew": "Add new",
-    "darkMode": "Dark mode"
+    "darkMode": "Dark mode",
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "emptyContent": {
     "users": "No users found"

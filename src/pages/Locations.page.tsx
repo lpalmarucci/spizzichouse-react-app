@@ -36,14 +36,17 @@ import { Player } from '../models/Player.ts';
 import AlertDialog from '../components/AlertDialog.component.tsx';
 import CreateEditLocationDialog from '../components/Locations/CreateEditLocation.component.tsx';
 
+const alwaysVisibleColumns = ['id', 'actions'];
+
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
   { name: 'Name', uid: 'name', sortable: true },
   { name: 'Address', uid: 'address' },
   { name: 'Users', uid: 'users' },
+  { name: 'Actions', uid: 'actions' },
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ['id', 'name', 'users'];
+const INITIAL_VISIBLE_COLUMNS = ['id', 'name', 'users', 'actions'];
 
 export default function LocationsPage() {
   const fetchData = useFetch();
@@ -121,7 +124,10 @@ export default function LocationsPage() {
         case 'actions':
           return (
             <div className="relative flex items-center gap-4">
-              <Tooltip content={t('players.tooltip.editUser')} closeDelay={0}>
+              <Tooltip
+                content={t('locations.tooltip.editLocation')}
+                closeDelay={0}
+              >
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                   <EditIcon
                     onClick={() => {
@@ -133,7 +139,7 @@ export default function LocationsPage() {
               </Tooltip>
               <Tooltip
                 color="danger"
-                content={t('players.tooltip.deleteUser')}
+                content={t('locations.tooltip.deleteLocation')}
                 closeDelay={0}
               >
                 <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -150,11 +156,13 @@ export default function LocationsPage() {
         case 'users':
           return (
             <div className="flex justify-start">
-              <AvatarGroup isBordered max={2}>
+              <AvatarGroup isBordered max={2} size="sm">
                 {(cellValue as Player[]).map((player) => (
-                  <Tooltip content={`${player.firstname} ${player.lastname}`}>
+                  <Tooltip
+                    key={player.id}
+                    content={`${player.firstname} ${player.lastname}`}
+                  >
                     <Avatar
-                      key={player.id}
                       name={getInitialLetters(
                         player.firstname,
                         player.lastname,
@@ -254,7 +262,7 @@ export default function LocationsPage() {
                   <DropdownItem
                     key={column.uid}
                     className="capitalize"
-                    isDisabled={['id', 'actions'].includes(column.uid)}
+                    isDisabled={alwaysVisibleColumns.includes(column.uid)}
                   >
                     {capitalize(column.name)}
                   </DropdownItem>
@@ -330,6 +338,7 @@ export default function LocationsPage() {
         bottomContentPlacement="outside"
         classNames={{
           wrapper: 'max-h-[420px]',
+          base: 'min-h-[56px]',
         }}
         sortDescriptor={sortDescriptor}
         topContent={topContent}
@@ -363,7 +372,7 @@ export default function LocationsPage() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onCloseDialog={fetchLocations}
-        user={{} as Player}
+        location={currentLocation}
       />
       <AlertDialog
         isOpen={isOpenAlertDialog}
@@ -371,7 +380,7 @@ export default function LocationsPage() {
         onConfirm={handleDeleteLocation}
         contentText={
           <div className="flex gap-1">
-            {t('players.messages.askDelete').replace(
+            {t('locations.messages.askDelete').replace(
               '{name}',
               currentLocation?.name ?? 'none',
             )}

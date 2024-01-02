@@ -14,6 +14,7 @@ import { Player } from '../../models/Player.ts';
 import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface ICreateEditUserProps {
   user?: Player;
@@ -29,6 +30,7 @@ function CreateEditUserDialogComponent({
   onCloseDialog,
 }: ICreateEditUserProps) {
   const fetchData = useFetch();
+  const { t } = useTranslation();
   const [firstname, setFirstname] = useState<string>('');
   const [lastname, setLastname] = useState<string>('');
   const [username, setUsername] = useState<string>('');
@@ -127,7 +129,7 @@ function CreateEditUserDialogComponent({
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="flat" onPress={onClose}>
+              <Button color="danger" variant="light" onPress={onClose}>
                 Cancel
               </Button>
               <Button
@@ -139,7 +141,7 @@ function CreateEditUserDialogComponent({
                 }}
                 isDisabled={!isFormValid}
               >
-                {user ? 'Save' : 'Add'}
+                {user ? t('buttons.save') : t('buttons.add')}
               </Button>
             </ModalFooter>
           </>
