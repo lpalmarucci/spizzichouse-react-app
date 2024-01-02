@@ -5,7 +5,7 @@
     "dashboard": "Dashboard",
     "players": "Giocatori",
     "matches": "Partite",
-    "locations": "Luoghi"
+    "locations": "Casate"
   },
   "players": {
     "title": "Lista giocatori",
@@ -20,7 +20,16 @@
     }
   },
   "locations": {
-    "list": "Lista luoghi"
+    "title": "Lista casate",
+    "searchPlaceholder": "Search by name...",
+    "messages": {
+      "askDelete": "Are you sure you want to delete location {name}?",
+      "deleteSuccess": "Location deleted successfully"
+    },
+    "tooltip": {
+      "deleteUser": "Delete location",
+      "editUser": "Edit location"
+    }
   },
   "buttons": {
     "login": "Login",
@@ -34,8 +43,11 @@
   "emptyContent": {
     "users": "No users found"
   },
-  "label": {
+  "labels": {
     "username": "Username",
-    "password": "Password"
+    "password": "Password",
+    "name": "Name",
+    "address": "Address",
+    "associatedUsers": "Users associated"
   }
 }

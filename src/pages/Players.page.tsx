@@ -290,8 +290,6 @@ export default function PlayersPage() {
     return (
       <div className="py-2 px-2 flex justify-center items-center">
         <Pagination
-          isCompact
-          showShadow
           color="primary"
           page={page}
           total={pages}

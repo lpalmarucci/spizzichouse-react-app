@@ -7,4 +7,11 @@ export const ApiEndpoint = {
   createUser: '/users',
   updateUser: '/users/:id',
   deleteUser: '/users/:id',
+
+  //locations
+  getLocations: '/locations',
+  getSingleLocation: '/locations/:id',
+  createLocation: '/locations',
+  updateLocation: '/locations/:id',
+  deleteLocation: '/locations/:id',
 };

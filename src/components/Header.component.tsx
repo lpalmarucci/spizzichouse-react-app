@@ -90,6 +90,7 @@ const Header = () => {
         >
           <Tab key={ROUTES.Dashboard} title={t('menu.dashboard')} />
           <Tab key={ROUTES.Players} title={t('menu.players')} />
+          <Tab key={ROUTES.Locations} title={t('menu.locations')} />
         </Tabs>
       </NavbarContent>
 
