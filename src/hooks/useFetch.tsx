@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../routes/common.routes';
 import { useToast } from '../context/Toast.context';
 
+const redirectResponseWithStatus = [401, 403];
+
 export default function useFetch() {
   const navigate = useNavigate();
   const auth = useAuthUser();
@@ -28,7 +30,8 @@ export default function useFetch() {
       headers,
     });
 
-    if (response.status === 401) navigate(ROUTES.Login, { replace: true });
+    if (redirectResponseWithStatus.includes(response.status))
+      navigate(ROUTES.Login, { replace: true });
 
     const data = (await response.json()) as T | ApiError;
 
