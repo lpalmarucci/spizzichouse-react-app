@@ -5,7 +5,7 @@
     "dashboard": "Dashboard",
     "players": "Giocatori",
     "matches": "Partite",
-    "locations": "Luoghi"
+    "locations": "Casate"
   },
   "players": {
     "title": "Lista giocatori",
@@ -20,7 +20,18 @@
     }
   },
   "locations": {
-    "list": "Lista luoghi"
+    "title": "Lista casate",
+    "searchPlaceholder": "Search by name...",
+    "messages": {
+      "askDelete": "Are you sure you want to delete location {name}?",
+      "deleteSuccess": "Location deleted successfully",
+      "creationSuccess": "Location created successfully",
+      "updateSuccess": "Location {name} saved successfully"
+    },
+    "tooltip": {
+      "deleteLocation": "Delete location",
+      "editLocation": "Edit location"
+    }
   },
   "buttons": {
     "login": "Login",
@@ -29,13 +40,19 @@
     "settings": "Impostazioni",
     "signInAs": "Entrato come",
     "addNew": "Add new",
-    "darkMode": "Dark mode"
+    "darkMode": "Dark mode",
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "emptyContent": {
     "users": "No users found"
   },
-  "label": {
+  "labels": {
     "username": "Username",
-    "password": "Password"
+    "password": "Password",
+    "name": "Name",
+    "address": "Address",
+    "associatedUsers": "Users associated"
   }
 }

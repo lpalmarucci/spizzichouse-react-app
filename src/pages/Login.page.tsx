@@ -42,7 +42,7 @@ const LoginPage = () => {
         <form className="flex flex-col gap-4">
           <Input
             type="text"
-            label={t('label.username')}
+            label={t('labels.username')}
             value={username}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setUsername(e.target.value)
@@ -50,7 +50,7 @@ const LoginPage = () => {
           />
           <Input
             type="password"
-            label={t('label.password')}
+            label={t('labels.password')}
             value={password}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setPassword(e.target.value)
