@@ -4,6 +4,7 @@ import Header from '../components/Header.component';
 import PlayersPage from '../pages/Players.page';
 import LocationsPage from '../pages/Locations.page';
 import LoginPage from '../pages/Login.page';
+import NotFoundPage from '../pages/NotFound.page.tsx';
 
 export const ROUTES = {
   Dashboard: '/dashboard',
@@ -48,8 +49,8 @@ const commonRoutes: RouteObject[] = [
     element: <LoginPage />,
   },
   {
-    path: '**',
-    element: <h1>404 Not found</h1>,
+    path: '*',
+    element: <NotFoundPage />,
   },
 ];
 
