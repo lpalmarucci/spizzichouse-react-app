@@ -1,16 +1,20 @@
 import {
+  Avatar,
+  AvatarGroup,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Chip,
   Divider,
+  Tooltip,
 } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { Match } from '../../models/Match.ts';
 import useFetch from '../../hooks/useFetch.tsx';
 import { ApiEndpoint } from '../../models/constants.ts';
 import { useNavigate } from 'react-router-dom';
+import { getInitialLetters } from '../../shared/utils.tsx';
 
 function MatchList() {
   const fetchData = useFetch();
@@ -24,16 +28,16 @@ function MatchList() {
 
   return (
     <div className="gap-2 gap-y-10 grid grid-cols-2 sm:grid-cols-4">
-      {matches.map((item, index) => (
+      {matches.map((match, index) => (
         <Card
           shadow="md"
           key={index}
           isPressable
-          onPress={() => navigate(item.id.toString())}
+          onPress={() => navigate(match.id.toString())}
         >
           <CardHeader className="justify-between gap-8 pb-0">
-            <span>ID Partita: {item.id}</span>
-            {item.inProgress ? (
+            <span>ID Partita: {match.id}</span>
+            {match.inProgress ? (
               <Chip color="success" variant="dot">
                 In corso
               </Chip>
@@ -43,11 +47,24 @@ function MatchList() {
               </Chip>
             )}
           </CardHeader>
-          <CardBody />
+          <CardBody className="py-8">
+            <AvatarGroup isBordered size="md" color="default">
+              {match.users.map((player) => (
+                <Tooltip
+                  key={player.id}
+                  content={`${player.firstname} ${player.lastname}`}
+                >
+                  <Avatar
+                    name={getInitialLetters(player.firstname, player.lastname)}
+                  />
+                </Tooltip>
+              ))}
+            </AvatarGroup>
+          </CardBody>
           <Divider />
           <CardFooter>
             <div className="w-full flex flex-col gap-0.5 items-start text-gray-400">
-              <span className="text-small italic">{item.location?.name}</span>
+              <span className="text-small italic">{match.location?.name}</span>
             </div>
             {/*<p className="text-default-500">{item.price}</p>*/}
           </CardFooter>

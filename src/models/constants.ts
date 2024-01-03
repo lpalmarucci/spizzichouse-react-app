@@ -24,4 +24,5 @@ export const ApiEndpoint = {
 
   //Round
   getRoundsByMatchId: '/matches/:matchId/rounds',
+  createRound: '/matches/:matchId/users/:userId/rounds/:roundId',
 };
