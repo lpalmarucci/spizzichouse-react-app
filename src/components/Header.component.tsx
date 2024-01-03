@@ -88,11 +88,13 @@ const Header = () => {
           onSelectionChange={(key) => {
             setSelectedKey(key.toString());
             navigate(key.toString());
+            console.log(`navigate to ${key.toString()}`);
           }}
         >
           <Tab key={ROUTES.Dashboard} title={t('menu.dashboard')} />
           <Tab key={ROUTES.Players} title={t('menu.players')} />
           <Tab key={ROUTES.Locations} title={t('menu.locations')} />
+          <Tab key={ROUTES.Matches} title={t('menu.matches')} />
         </Tabs>
       </NavbarContent>
 

@@ -4,7 +4,9 @@ import Header from '../components/Header.component';
 import PlayersPage from '../pages/Players.page';
 import LocationsPage from '../pages/Locations.page';
 import LoginPage from '../pages/Login.page';
+import MatchesPage from '../pages/Matches.page.tsx';
 import NotFoundPage from '../pages/NotFound.page.tsx';
+import MatchDetailPage from '../pages/MatchDetail.page.tsx';
 
 export const ROUTES = {
   Dashboard: '/dashboard',
@@ -41,6 +43,14 @@ const commonRoutes: RouteObject[] = [
       {
         path: 'players',
         element: <PlayersPage />,
+      },
+      {
+        path: 'matches',
+        element: <MatchesPage />,
+      },
+      {
+        path: 'matches/:id',
+        element: <MatchDetailPage />,
       },
     ],
   },

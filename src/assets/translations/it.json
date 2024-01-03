@@ -43,7 +43,8 @@
     "darkMode": "Dark mode",
     "add": "Add",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "addRound": "Add round"
   },
   "emptyContent": {
     "users": "No users found"
