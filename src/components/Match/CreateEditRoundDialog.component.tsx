@@ -10,7 +10,7 @@ import {
   Selection,
   SelectItem,
 } from '@nextui-org/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
@@ -44,11 +44,14 @@ function CreateEditRoundDialog({
       .replace(':matchId', match.id.toString())
       .replace(':roundId', roundId.toString());
     // const method = round ? 'PATCH' : 'POST';
-    const successMessage = 'Round created successfully';
+    const successMessage = round
+      ? 'Round saved successfully'
+      : 'Round created successfully';
     const body = JSON.stringify({ points });
+    const method = round ? 'PATCH' : 'POST';
 
     const promises = Array.from(selectedUsers.values()).map((userId) =>
-      fetchData<Round>(url.replace(':userId', userId.toString()), 'POST', {
+      fetchData<Round>(url.replace(':userId', userId.toString()), method, {
         body,
       }),
     );
@@ -66,13 +69,13 @@ function CreateEditRoundDialog({
     [match, selectedUsers, points, roundId],
   );
 
-  // useEffect(() => {
-  //   if (round) {
-  //     setFirstname(round.firstname);
-  //     setLastname(round.lastname);
-  //     setUsername(round.username);
-  //   }
-  // }, [round]);
+  useEffect(() => {
+    if (round) {
+      setRoundId(round.roundId);
+      setSelectedUsers(new Set([round.user.id.toString()]));
+      setPoints(round.points);
+    }
+  }, [round]);
 
   return (
     <Modal
@@ -98,6 +101,7 @@ function CreateEditRoundDialog({
                 onSelectionChange={(keys: Selection) =>
                   setSelectedUsers(keys as Set<string>)
                 }
+                isDisabled={Boolean(round)}
               >
                 {match.users.map((user) => (
                   <SelectItem
@@ -116,6 +120,7 @@ function CreateEditRoundDialog({
                   label="Round number"
                   placeholder="Enter the round number"
                   variant="bordered"
+                  isDisabled={Boolean(round)}
                   value={roundId.toString()}
                   onChange={(e) => setRoundId(Number(e.target.value))}
                 />
