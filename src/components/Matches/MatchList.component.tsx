@@ -87,6 +87,7 @@ function MatchList({
             key={index}
             isPressable
             onPress={() => navigate(match.id.toString())}
+            as="div"
           >
             <CardHeader className="justify-between gap-8 pb-0">
               <span>ID Partita: {match.id}</span>
