@@ -40,6 +40,11 @@ function MatchList({
     onOpen: onOpenEndMatchDialog,
     onOpenChange: onOpenChangeEndMatchDialog,
   } = useDisclosure();
+  const {
+    isOpen: isOpenDeleteMatchDialog,
+    onOpen: onOpenDeleteMatchDialog,
+    onOpenChange: onOpenChangeDeleteMatchDialog,
+  } = useDisclosure();
   const { showAlertMessage } = useToast();
 
   const handleEndMatch = React.useCallback(() => {
@@ -57,6 +62,22 @@ function MatchList({
       fetchAllMatches();
     });
   }, [selectedMatch]);
+
+  const handleDeleteMatch = React.useCallback(() => {
+    if (!selectedMatch) return;
+    const url = ApiEndpoint.deleteMatch.replace(
+      ':id',
+      selectedMatch?.id.toString(),
+    );
+    fetchData<Match>(url, 'DELETE').then(() => {
+      showAlertMessage({
+        message: 'Match deleted successfully',
+        type: 'success',
+      });
+      fetchAllMatches();
+    });
+  }, [selectedMatch]);
+
   return (
     <>
       <div className="gap-2 gap-y-10 grid grid-cols-2 sm:grid-cols-4">
@@ -127,6 +148,10 @@ function MatchList({
                     key="delete"
                     color="danger"
                     className="text-danger"
+                    onPress={() => {
+                      onOpenDeleteMatchDialog();
+                      setSelectedMatch(match);
+                    }}
                   >
                     Elimina
                   </DropdownItem>
@@ -142,6 +167,12 @@ function MatchList({
         contentText={'Are you sure you want to end the match?'}
         onConfirm={handleEndMatch}
         confirmButtonText="Confirm"
+      />
+      <AlertDialog
+        isOpen={isOpenDeleteMatchDialog}
+        onOpenChange={onOpenChangeDeleteMatchDialog}
+        contentText={`Are you sure you want to delete the match #${selectedMatch?.id}?`}
+        onConfirm={handleDeleteMatch}
       />
     </>
   );
