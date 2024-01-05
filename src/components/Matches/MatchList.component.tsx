@@ -142,6 +142,7 @@ function MatchList({
                       onOpenEndMatchDialog();
                       setSelectedMatch(match);
                     }}
+                    isDisabled={!match.inProgress}
                   >
                     End match
                   </DropdownItem>
