@@ -9,23 +9,12 @@ import {
   Divider,
   Tooltip,
 } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
 import { Match } from '../../models/Match.ts';
-import useFetch from '../../hooks/useFetch.tsx';
-import { ApiEndpoint } from '../../models/constants.ts';
 import { useNavigate } from 'react-router-dom';
 import { getInitialLetters } from '../../shared/utils.tsx';
 
-function MatchList() {
-  const fetchData = useFetch();
+function MatchList({ matches }: { matches: Match[] }) {
   const navigate = useNavigate();
-  const [matches, setMatches] = useState<Match[]>([]);
-  useEffect(() => {
-    fetchData<Match[]>(ApiEndpoint.getMatches, 'GET').then((data) =>
-      setMatches(data),
-    );
-  }, []);
-
   return (
     <div className="gap-2 gap-y-10 grid grid-cols-2 sm:grid-cols-4">
       {matches.map((match, index) => (

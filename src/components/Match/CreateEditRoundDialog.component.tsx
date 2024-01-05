@@ -88,7 +88,7 @@ function CreateEditRoundDialog({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1 ">
-              {round ? 'Edit user' : 'Create user'}
+              {round ? 'Edit round' : 'Create round'}
             </ModalHeader>
             <ModalBody>
               <Select
