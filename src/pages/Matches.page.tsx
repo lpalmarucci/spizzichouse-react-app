@@ -21,9 +21,10 @@ function MatchesPage() {
   }, []);
 
   const getMatches = () =>
-    fetchData<Match[]>(ApiEndpoint.getMatches, 'GET').then((data) =>
-      setMatches(data),
-    );
+    fetchData<Match[]>(ApiEndpoint.getMatches, 'GET').then((data) => {
+      setMatches(data);
+      return Promise.resolve(data);
+    });
 
   return (
     <div className="flex flex-col gap-12 items-center align-middle mx-auto w-full px-6 max-w-5xl">
@@ -36,7 +37,7 @@ function MatchesPage() {
       >
         {t('buttons.addNew')}
       </Button>
-      <MatchList matches={matches} />
+      <MatchList matches={matches} fetchAllMatches={getMatches} />
       <CreateEditMatchDialog
         isOpen={isOpen}
         onOpenChange={onOpenChange}

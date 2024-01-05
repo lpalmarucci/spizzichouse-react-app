@@ -14,6 +14,7 @@ interface IAlertDialogProps {
   isOpen: boolean;
   onOpenChange: () => void;
   onConfirm?: () => void;
+  confirmButtonText?: string;
 }
 
 const AlertDialog = ({
@@ -22,6 +23,7 @@ const AlertDialog = ({
   onConfirm,
   onOpenChange,
   contentText,
+  confirmButtonText = 'Delete',
 }: IAlertDialogProps) => (
   <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
     <ModalContent>
@@ -42,7 +44,7 @@ const AlertDialog = ({
                 onClose();
               }}
             >
-              Delete
+              {confirmButtonText}
             </Button>
           </ModalFooter>
         </>
