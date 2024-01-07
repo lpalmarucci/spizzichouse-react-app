@@ -1,4 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import useLocalStorage from '../hooks/useLocalStorage.tsx';
+import { LocalStorageKeys } from '../costants/localStorage.ts';
 
 export type Theme = 'light' | 'dark';
 
@@ -14,22 +16,33 @@ export const useTheme = () => useContext<IThemeContext>(ThemeContext);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [storedValue, saveValueToLocalStorage] = useLocalStorage<Theme>(
+    LocalStorageKeys.THEME,
+    'dark',
+  );
+  console.log({ storedValue });
   const [theme, setTheme] = useState<Theme>('dark');
-  const bodyElement = React.useMemo<HTMLBodyElement>(
-    () => document.querySelector('body')!,
+  const rootElement = React.useMemo<HTMLElement>(
+    () => document.querySelector('html')!,
     [],
   );
+
+  useEffect(() => {
+    toggleTheme();
+  }, []);
 
   const toggleTheme = React.useCallback(() => {
     setTheme((prev) => {
       if (prev === 'dark') {
-        bodyElement.classList.remove('dark');
-        bodyElement.classList.add('light');
+        rootElement.classList.remove('dark');
+        rootElement.classList.add('light');
       } else {
-        bodyElement.classList.remove('light');
-        bodyElement.classList.add('dark');
+        rootElement.classList.remove('light');
+        rootElement.classList.add('dark');
       }
-      return prev === 'light' ? 'dark' : 'light';
+      const newTheme = prev === 'light' ? 'dark' : 'light';
+      saveValueToLocalStorage(newTheme);
+      return newTheme;
     });
   }, []);
 

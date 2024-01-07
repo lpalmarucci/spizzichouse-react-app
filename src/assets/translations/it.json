@@ -37,7 +37,7 @@
     "editTitle": "Modifica partita #{id}",
     "createTitle": "Crea partita",
     "messages": {
-      "matchEnded": "Match terminato correttamente",
+      "matchEnded": "Partita terminata correttamente",
       "askDelete": "Sei sicuro di voler eliminare la partita #{id}?",
       "askEndMatch": "Sei sicuro di terminare la partita #{id}?",
       "deleteSuccess": "Partita eliminata con successo",
@@ -104,6 +104,7 @@
     "all": "Tutti",
     "players": "Giocatori",
     "totalPoints": "Punti totali",
-    "location": "Casata"
+    "location": "Casata",
+    "attention": "Attenzione"
   }
 }

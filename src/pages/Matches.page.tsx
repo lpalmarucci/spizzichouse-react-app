@@ -1,8 +1,8 @@
-import MatchList from '../components/Matches/MatchList.component.tsx';
+import MatchList from '../components/Match/MatchList.component.tsx';
 import { Button, Tab, Tabs, useDisclosure } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { useTranslation } from 'react-i18next';
-import CreateEditMatchDialog from '../components/Match/CreateEditMatchDialog.component.tsx';
+import CreateEditMatchDialog from '../components/Match/Dialog/CreateEditMatchDialog.component.tsx';
 import React, { useEffect, useState } from 'react';
 import { Match } from '../models/Match.ts';
 import { ApiEndpoint } from '../models/constants.ts';
@@ -37,11 +37,15 @@ function MatchesPage() {
     getMatches();
   }, []);
 
-  const getMatches = () =>
-    fetchData<Match[]>(ApiEndpoint.getMatches, 'GET').then((data) => {
+  const getMatches = async () => {
+    try {
+      const data = await fetchData<Match[]>(ApiEndpoint.getMatches, 'GET');
       setMatches(data);
       return Promise.resolve(data);
-    });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
   const filteredMatches = React.useMemo<Match[]>(() => {
     if (selectedMatchFilter === 'all') return matches.slice();
 

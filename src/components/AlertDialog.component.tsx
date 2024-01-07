@@ -32,7 +32,7 @@ const AlertDialog = ({
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader>{title ?? 'Attention'}</ModalHeader>
+            <ModalHeader>{title ?? t('labels.attention')}</ModalHeader>
             <ModalBody>{contentText ?? t('defaultAlertText')}</ModalBody>
             <ModalFooter>
               <Button color="danger" variant="flat" onPress={onClose}>

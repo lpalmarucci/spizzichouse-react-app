@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Link,
   Navbar,
@@ -43,8 +43,6 @@ const Header = () => {
     ROUTES.Dashboard,
   );
   const [selectedKey, setSelectedKey] = useState<string>(storedValue);
-
-  useEffect(() => {}, []);
 
   //If i don't have the user data, it means that i'm not logged in anymore
   if (!userData) {

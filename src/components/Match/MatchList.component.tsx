@@ -10,7 +10,7 @@ function MatchList({
 }) {
   return (
     <>
-      <div className="w-full flex flex-wrap  justify-between gap-2 gap-y-10">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-start gap-2 gap-y-10 overflow-auto">
         {matches.map((match) => (
           <MatchCard
             key={match.id}

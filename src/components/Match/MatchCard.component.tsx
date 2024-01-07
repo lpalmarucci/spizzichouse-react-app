@@ -21,7 +21,7 @@ import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon.tsx';
 import { Match } from '../../models/Match.ts';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import CreateEditMatchDialog from '../Match/CreateEditMatchDialog.component.tsx';
+import CreateEditMatchDialog from './Dialog/CreateEditMatchDialog.component.tsx';
 import AlertDialog from '../AlertDialog.component.tsx';
 import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
@@ -183,7 +183,7 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       <AlertDialog
         isOpen={isOpenEndMatchDialog}
         onOpenChange={onOpenChangeEndMatchDialog}
-        contentText={t('matches.message.askEndMatch').replace(
+        contentText={t('matches.messages.askEndMatch').replace(
           '{id}',
           selectedMatch?.id.toString() ?? '',
         )}
@@ -193,7 +193,7 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       <AlertDialog
         isOpen={isOpenDeleteMatchDialog}
         onOpenChange={onOpenChangeDeleteMatchDialog}
-        contentText={t('matches.message.askDelete').replace(
+        contentText={t('matches.messages.askDelete').replace(
           '{id}',
           selectedMatch?.id.toString() ?? '',
         )}
@@ -203,7 +203,5 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
   );
 }
 
-export default React.memo(
-  MatchCard,
-  (prevProps, nextProps) => prevProps.match.id === nextProps.match.id,
-);
+// eslint-disable-next-line react-refresh/only-export-components
+export default React.memo(MatchCard);
