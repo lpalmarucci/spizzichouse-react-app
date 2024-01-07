@@ -1,6 +1,7 @@
 {
   "appName": "Spizzichouse",
   "loading": "Loading...",
+  "defaultAlertText": "Sei sicuro di voler procedere?",
   "menu": {
     "dashboard": "Dashboard",
     "players": "Giocatori",

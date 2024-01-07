@@ -7,6 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@nextui-org/react';
+import { useTranslation } from 'react-i18next';
 
 interface IAlertDialogProps {
   title?: React.ReactNode;
@@ -23,34 +24,35 @@ const AlertDialog = ({
   onConfirm,
   onOpenChange,
   contentText,
-  confirmButtonText = 'Delete',
-}: IAlertDialogProps) => (
-  <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
-    <ModalContent>
-      {(onClose) => (
-        <>
-          <ModalHeader>{title ?? 'Attention'}</ModalHeader>
-          <ModalBody>
-            {contentText ?? 'Are you sure you want to proceed?'}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" variant="flat" onPress={onClose}>
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              onPress={async () => {
-                await onConfirm?.call(this);
-                onClose();
-              }}
-            >
-              {confirmButtonText}
-            </Button>
-          </ModalFooter>
-        </>
-      )}
-    </ModalContent>
-  </Modal>
-);
+  confirmButtonText = 'Elimina',
+}: IAlertDialogProps) => {
+  const { t } = useTranslation();
+  return (
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader>{title ?? 'Attention'}</ModalHeader>
+            <ModalBody>{contentText ?? t('defaultAlertText')}</ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="flat" onPress={onClose}>
+                {t('buttons.cancel')}
+              </Button>
+              <Button
+                color="primary"
+                onPress={async () => {
+                  await onConfirm?.call(this);
+                  onClose();
+                }}
+              >
+                {confirmButtonText}
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
+  );
+};
 
 export default AlertDialog;
