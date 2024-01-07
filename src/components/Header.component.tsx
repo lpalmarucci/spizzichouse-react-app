@@ -38,7 +38,7 @@ const Header = () => {
   const userData = useAuthUser()();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
-  const [storedValue, setValueToLocalStorage] = useLocalStorage<string>(
+  const [storedValue, saveValueToLocalStorage] = useLocalStorage<string>(
     LocalStorageKeys.LAST_VISITED_PAGE,
     ROUTES.Dashboard,
   );
@@ -77,7 +77,7 @@ const Header = () => {
           <p
             className="cursor-pointer select-none text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-500"
             onClick={() => {
-              setValueToLocalStorage(ROUTES.Dashboard);
+              saveValueToLocalStorage(ROUTES.Dashboard);
               setSelectedKey(ROUTES.Dashboard);
               navigate(ROUTES.Dashboard);
             }}
@@ -93,7 +93,7 @@ const Header = () => {
           size="lg"
           selectedKey={selectedKey}
           onSelectionChange={(key) => {
-            setValueToLocalStorage(key.toString());
+            saveValueToLocalStorage(key.toString());
             setSelectedKey(key.toString());
             navigate(key.toString());
             console.log(`navigate to ${key.toString()}`);
