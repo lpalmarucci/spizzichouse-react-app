@@ -98,7 +98,6 @@ function CreateEditMatchDialog({
 
   useEffect(() => {
     if (match) {
-      console.log({ match });
       setSelectedLocation(new Set(match.location?.id.toString() ?? '-1'));
       setSelectedUsers(new Set(match.users.map((user) => user.id.toString())));
       setTotalPoints(match.totalPoints);

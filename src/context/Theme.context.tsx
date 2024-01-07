@@ -20,8 +20,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     LocalStorageKeys.THEME,
     'dark',
   );
-  console.log({ storedValue });
-  const [theme, setTheme] = useState<Theme>('dark');
+  const [theme, setTheme] = useState<Theme>(storedValue);
   const rootElement = React.useMemo<HTMLElement>(
     () => document.querySelector('html')!,
     [],
