@@ -28,6 +28,8 @@ import { getInitialLetters } from '../shared/utils';
 import { useTheme } from '../context/Theme.context.tsx';
 import { SunIcon } from '../icons/SunIcon.tsx';
 import { MoonIcon } from '../icons/MoonIcon.tsx';
+import useLocalStorage from '../hooks/useLocalStorage.tsx';
+import { LocalStorageKeys } from '../costants/localStorage.ts';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -36,9 +38,11 @@ const Header = () => {
   const userData = useAuthUser()();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
-  const [selectedKey, setSelectedKey] = useState<string>(
-    window.location.pathname,
+  const [storedValue, saveValueToLocalStorage] = useLocalStorage<string>(
+    LocalStorageKeys.LAST_VISITED_PAGE,
+    ROUTES.Dashboard,
   );
+  const [selectedKey, setSelectedKey] = useState<string>(storedValue);
 
   //If i don't have the user data, it means that i'm not logged in anymore
   if (!userData) {
@@ -47,6 +51,7 @@ const Header = () => {
   }
 
   function handleLogout() {
+    localStorage.clear();
     if (signOut()) {
       navigate(ROUTES.Login);
     }
@@ -71,6 +76,7 @@ const Header = () => {
           <p
             className="cursor-pointer select-none text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-500"
             onClick={() => {
+              saveValueToLocalStorage(ROUTES.Dashboard);
               setSelectedKey(ROUTES.Dashboard);
               navigate(ROUTES.Dashboard);
             }}
@@ -86,13 +92,16 @@ const Header = () => {
           size="lg"
           selectedKey={selectedKey}
           onSelectionChange={(key) => {
+            saveValueToLocalStorage(key.toString());
             setSelectedKey(key.toString());
             navigate(key.toString());
+            console.log(`navigate to ${key.toString()}`);
           }}
         >
           <Tab key={ROUTES.Dashboard} title={t('menu.dashboard')} />
           <Tab key={ROUTES.Players} title={t('menu.players')} />
           <Tab key={ROUTES.Locations} title={t('menu.locations')} />
+          <Tab key={ROUTES.Matches} title={t('menu.matches')} />
         </Tabs>
       </NavbarContent>
 

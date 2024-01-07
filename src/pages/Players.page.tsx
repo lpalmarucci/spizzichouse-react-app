@@ -182,7 +182,7 @@ export default function PlayersPage() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder={t('players.searchPlaceholder')}
+            placeholder={t('placeholders.searchByUsername')}
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={onClear}

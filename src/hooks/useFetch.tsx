@@ -6,6 +6,8 @@ import { useToast } from '../context/Toast.context';
 
 const redirectResponseWithStatus = [401, 403];
 
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+
 export default function useFetch() {
   const navigate = useNavigate();
   const auth = useAuthUser();
@@ -13,7 +15,7 @@ export default function useFetch() {
 
   async function fetchData<T>(
     url: string,
-    method: RequestInit['method'],
+    method: HttpMethod,
     options?: RequestInit,
     withAuthorization: boolean = true,
   ): Promise<T> {
