@@ -10,16 +10,6 @@ import useFetch from '../hooks/useFetch.tsx';
 
 //Fetch here all the matches available
 type Filter = { key: 'all' | 'in_progress'; text: string };
-const MATCH_FILTER: Filter[] = [
-  {
-    key: 'all',
-    text: 'All',
-  },
-  {
-    key: 'in_progress',
-    text: 'In Progress',
-  },
-];
 
 function MatchesPage() {
   const { t } = useTranslation();
@@ -28,6 +18,20 @@ function MatchesPage() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedMatchFilter, setSelectedMatchFilter] =
     useState<Filter['key']>();
+
+  const MATCH_FILTER: Filter[] = React.useMemo(
+    () => [
+      {
+        key: 'all',
+        text: t('labels.all'),
+      },
+      {
+        key: 'in_progress',
+        text: t('matches.labels.inProgress'),
+      },
+    ],
+    [],
+  );
 
   useEffect(() => {
     getMatches();
@@ -45,11 +49,13 @@ function MatchesPage() {
   }, [matches, selectedMatchFilter]);
 
   return (
-    <div className="flex flex-col gap-12 items-center align-middle mx-auto w-full px-6 max-w-5xl">
-      <h1 className="text-6xl text-foreground font-bold">Lista partite</h1>
+    <div className="flex flex-col gap-12 items-center align-middle mx-auto w-full px-6 max-w-6xl">
+      <h1 className="text-6xl text-foreground font-bold">
+        {t('matches.title')}
+      </h1>
       <div className="w-full flex items-center justify-between">
         <Tabs
-          aria-label="Matches Filter"
+          aria-label="Filtri match"
           selectedKey={selectedMatchFilter}
           onSelectionChange={(val) =>
             setSelectedMatchFilter(val as Filter['key'])

@@ -34,19 +34,24 @@ type AggregatedRound = {
   rounds: Round[];
 };
 
-const roundTableColumns = [
-  { name: 'Round number', uid: 'roundId' },
-  { name: 'Points', uid: 'points' },
-  { name: 'Actions', uid: 'actions' },
-];
-
 function MatchDetailPage() {
+  const { t } = useTranslation();
   const [isLoadingRounds, setLoadingRounds] = useState<boolean>(true);
   const [aggregatedRounds, setAggregatedRounds] = useState<AggregatedRound[]>(
     [],
   );
   const [currentMatch, setCurrentMatch] = useState<Match>({} as Match);
   const [currentRound, setCurrentRound] = useState<Round | undefined>();
+
+  const roundTableColumns = React.useMemo(
+    () => [
+      { name: t('matches.labels.roundNumber'), uid: 'roundId' },
+      { name: t('matches.labels.points'), uid: 'points' },
+      { name: t('matches.labels.actions'), uid: 'actions' },
+    ],
+    [],
+  );
+
   const filteredRoundTableColumns = React.useMemo(() => {
     if (currentMatch.inProgress) return roundTableColumns;
     return roundTableColumns.filter((c) => c.uid !== 'actions');
@@ -59,7 +64,6 @@ function MatchDetailPage() {
   } = useDisclosure();
   const { showAlertMessage } = useToast();
   const { id } = useParams();
-  const { t } = useTranslation();
   const fetchData = useFetch();
   const navigate = useNavigate();
 
@@ -183,7 +187,7 @@ function MatchDetailPage() {
       .replace(':roundId', roundId.toString());
     return fetchData<Round>(url, 'DELETE').then(() => {
       showAlertMessage({
-        message: 'Round deleted successfully',
+        message: t('rounds.messages.deleteSuccess'),
         type: 'success',
       });
       fetchRounds(currentRound.matchId.toString());
@@ -224,8 +228,6 @@ function MatchDetailPage() {
         return <span>{cellValue.toString()}</span>;
     }
   }, []);
-
-  console.log({ currentMatch });
 
   return (
     <div className="flex flex-col gap-12 items-center align-middle mx-auto w-full px-6 max-w-7xl">
@@ -281,7 +283,10 @@ function MatchDetailPage() {
                     name={getInitialLetters(player.firstname, player.lastname)}
                   />
                 }
-                subtitle={`${rounds.length} rounds played`}
+                subtitle={t('rounds.labels.numRoundsPlayed').replace(
+                  '{number}',
+                  rounds.length.toString(),
+                )}
                 title={
                   <div className="w-full flex justify-between items-center relative">
                     <span>{`${player.firstname} ${player.lastname}`}</span>
@@ -319,7 +324,7 @@ function MatchDetailPage() {
           </Accordion>
         ) : (
           <h1 className="text-center text-2xl text-gray-700 dark:text-gray-400">
-            No rounds found for this match. Create a new one now!
+            {t('rounds.labels.noRoundsForThisMatch')}
           </h1>
         )}
       </div>
@@ -336,7 +341,9 @@ function MatchDetailPage() {
         onConfirm={handleDeleteRound}
         contentText={
           <div className="flex gap-1">
-            {`Are you sure you want to delete round #${currentRound?.roundId} for the user ${currentRound?.user.username}?`}
+            {t('rounds.messages.askDelete')
+              .replace('{id}', currentRound?.roundId.toString() ?? '')
+              .replace('{username}', currentRound?.user.username ?? '')}
           </div>
         }
       />

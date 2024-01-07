@@ -25,6 +25,7 @@ import { ApiEndpoint } from '../../models/constants.ts';
 import { useToast } from '../../context/Toast.context.tsx';
 import AlertDialog from '../AlertDialog.component.tsx';
 import CreateEditMatchDialog from '../Match/CreateEditMatchDialog.component.tsx';
+import { useTranslation } from 'react-i18next';
 
 function MatchList({
   matches,
@@ -33,6 +34,7 @@ function MatchList({
   matches: Match[];
   fetchAllMatches: () => Promise<Match[]>;
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const fetchData = useFetch();
   const [selectedMatch, setSelectedMatch] = useState<Match | undefined>();
@@ -62,7 +64,7 @@ function MatchList({
     const body = JSON.stringify({ inProgress: false });
     fetchData<Match>(url, 'PATCH', { body }).then(() => {
       showAlertMessage({
-        message: 'Match ended successfully',
+        message: t('matches.messages.matchEnded'),
         type: 'success',
       });
       fetchAllMatches();
@@ -77,7 +79,7 @@ function MatchList({
     );
     fetchData<Match>(url, 'DELETE').then(() => {
       showAlertMessage({
-        message: 'Match deleted successfully',
+        message: t('matches.messages.deleteSuccess'),
         type: 'success',
       });
       fetchAllMatches();
@@ -86,7 +88,7 @@ function MatchList({
 
   return (
     <>
-      <div className="w-full flex flex-wrap gap-2 gap-y-10 ">
+      <div className="w-full flex flex-wrap  justify-between gap-2 gap-y-10">
         {matches.map((match, index) => (
           <Card
             shadow="md"
@@ -94,16 +96,21 @@ function MatchList({
             isPressable
             onPress={() => navigate(match.id.toString())}
             as="div"
+            classNames={{
+              base: 'flex-grow sm:flex-grow-0',
+            }}
           >
             <CardHeader className="justify-between gap-8 pb-0">
-              <span>ID Partita: {match.id}</span>
+              <span>
+                {t('matches.labels.matchId')}: {match.id}
+              </span>
               {match.inProgress ? (
                 <Chip color="success" variant="dot">
-                  In corso
+                  {t('matches.labels.inProgress')}
                 </Chip>
               ) : (
                 <Chip color="danger" variant="bordered">
-                  Terminata
+                  {t('matches.labels.ended')}
                 </Chip>
               )}
             </CardHeader>
@@ -144,8 +151,9 @@ function MatchList({
                       onOpenEditMatchDialog();
                       setSelectedMatch(match);
                     }}
+                    isDisabled={!match.inProgress}
                   >
-                    Modifica
+                    {t('buttons.edit')}
                   </DropdownItem>
                   <DropdownItem
                     key="end_match"
@@ -158,7 +166,7 @@ function MatchList({
                     }}
                     isDisabled={!match.inProgress}
                   >
-                    End match
+                    {t('buttons.endMatch')}
                   </DropdownItem>
                   <DropdownItem
                     key="delete"
@@ -169,7 +177,7 @@ function MatchList({
                       setSelectedMatch(match);
                     }}
                   >
-                    Elimina
+                    {t('buttons.delete')}
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -185,14 +193,20 @@ function MatchList({
       <AlertDialog
         isOpen={isOpenEndMatchDialog}
         onOpenChange={onOpenChangeEndMatchDialog}
-        contentText={`Are you sure you want to end the match #${selectedMatch?.id}?`}
+        contentText={t('matches.message.askEndMatch').replace(
+          '{id}',
+          selectedMatch?.id.toString() ?? '',
+        )}
         onConfirm={handleEndMatch}
         confirmButtonText="Confirm"
       />
       <AlertDialog
         isOpen={isOpenDeleteMatchDialog}
         onOpenChange={onOpenChangeDeleteMatchDialog}
-        contentText={`Are you sure you want to delete the match #${selectedMatch?.id}?`}
+        contentText={t('matches.message.askDelete').replace(
+          '{id}',
+          selectedMatch?.id.toString() ?? '',
+        )}
         onConfirm={handleDeleteMatch}
       />
     </>

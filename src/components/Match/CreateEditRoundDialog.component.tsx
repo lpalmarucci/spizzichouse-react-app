@@ -45,8 +45,8 @@ function CreateEditRoundDialog({
       .replace(':roundId', roundId.toString());
     // const method = round ? 'PATCH' : 'POST';
     const successMessage = round
-      ? 'Round saved successfully'
-      : 'Round created successfully';
+      ? t('rounds.messages.updateSuccess')
+      : t('rounds.messages.creationSuccess');
     const body = JSON.stringify({ points });
     const method = round ? 'PATCH' : 'POST';
 
@@ -88,13 +88,18 @@ function CreateEditRoundDialog({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1 ">
-              {round ? 'Edit round' : 'Create round'}
+              {round
+                ? t('rounds.labels.editRound').replace(
+                    '{id}',
+                    round.roundId.toString(),
+                  )
+                : t('rounds.labels.createRound')}
             </ModalHeader>
             <ModalBody>
               <Select
                 autoFocus
-                label={'Users'}
-                placeholder="Select the users"
+                label={t('labels.players')}
+                placeholder={t('placeholders.selectUsers')}
                 selectionMode="multiple"
                 variant="bordered"
                 isRequired={true}
@@ -118,8 +123,8 @@ function CreateEditRoundDialog({
                 <Input
                   type="number"
                   min={0}
-                  label="Round number"
-                  placeholder="Enter the round number"
+                  label={t('matches.labels.roundNumber')}
+                  placeholder={t('placeholders.enterRoundNumber')}
                   variant="bordered"
                   isRequired={true}
                   isDisabled={Boolean(round)}
@@ -129,8 +134,8 @@ function CreateEditRoundDialog({
                 <Input
                   type="number"
                   min={0}
-                  label="Points"
-                  placeholder="Enter the points scored in this round"
+                  label={t('matches.labels.points')}
+                  placeholder={t('placeholders.enterPointsScored')}
                   variant="bordered"
                   isRequired={true}
                   value={points.toString()}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Link,
   Navbar,
@@ -28,6 +28,8 @@ import { getInitialLetters } from '../shared/utils';
 import { useTheme } from '../context/Theme.context.tsx';
 import { SunIcon } from '../icons/SunIcon.tsx';
 import { MoonIcon } from '../icons/MoonIcon.tsx';
+import useLocalStorage from '../hooks/useLocalStorage.tsx';
+import { LocalStorageKeys } from '../costants/localStorage.ts';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -36,9 +38,13 @@ const Header = () => {
   const userData = useAuthUser()();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
-  const [selectedKey, setSelectedKey] = useState<string>(
-    window.location.pathname,
+  const [storedValue, setValueToLocalStorage] = useLocalStorage<string>(
+    LocalStorageKeys.LAST_VISITED_PAGE,
+    ROUTES.Dashboard,
   );
+  const [selectedKey, setSelectedKey] = useState<string>(storedValue);
+
+  useEffect(() => {}, []);
 
   //If i don't have the user data, it means that i'm not logged in anymore
   if (!userData) {
@@ -71,6 +77,7 @@ const Header = () => {
           <p
             className="cursor-pointer select-none text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-500"
             onClick={() => {
+              setValueToLocalStorage(ROUTES.Dashboard);
               setSelectedKey(ROUTES.Dashboard);
               navigate(ROUTES.Dashboard);
             }}
@@ -86,6 +93,7 @@ const Header = () => {
           size="lg"
           selectedKey={selectedKey}
           onSelectionChange={(key) => {
+            setValueToLocalStorage(key.toString());
             setSelectedKey(key.toString());
             navigate(key.toString());
             console.log(`navigate to ${key.toString()}`);

@@ -9,28 +9,61 @@
   },
   "players": {
     "title": "Lista giocatori",
-    "searchPlaceholder": "Search by username...",
     "messages": {
-      "askDelete": "Are you sure you want to delete user {name}?",
-      "deleteSuccess": "User deleted successfully"
+      "askDelete": "Sei sicuro di voler eliminare l'utente {name}?",
+      "deleteSuccess": "Utente eliminato con successo"
     },
     "tooltip": {
-      "deleteUser": "Delete user",
-      "editUser": "Edit user"
+      "deleteUser": "Elimina utente",
+      "editUser": "Modifica utente"
     }
   },
   "locations": {
     "title": "Lista casate",
-    "searchPlaceholder": "Search by name...",
     "messages": {
-      "askDelete": "Are you sure you want to delete location {name}?",
-      "deleteSuccess": "Location deleted successfully",
-      "creationSuccess": "Location created successfully",
-      "updateSuccess": "Location {name} saved successfully"
+      "askDelete": "Sei sicuro di voler eliminare la casa {name}?",
+      "deleteSuccess": "Casata eliminata con successo",
+      "creationSuccess": "Casata creata con successo",
+      "updateSuccess": "Casata {name} salvata con successo"
     },
     "tooltip": {
-      "deleteLocation": "Delete location",
-      "editLocation": "Edit location"
+      "deleteLocation": "Elimina casata",
+      "editLocation": "Modifica casata"
+    }
+  },
+  "matches": {
+    "title": "Lista partite",
+    "editTitle": "Modifica partita #{id}",
+    "createTitle": "Crea partita",
+    "messages": {
+      "matchEnded": "Match terminato correttamente",
+      "askDelete": "Sei sicuro di voler eliminare la partita #{id}?",
+      "askEndMatch": "Sei sicuro di terminare la partita #{id}?",
+      "deleteSuccess": "Partita eliminata con successo",
+      "creationSuccess": "Partita creata con successo",
+      "updateSuccess": "Partita salvata con successo"
+    },
+    "labels": {
+      "matchId": "ID Partita",
+      "inProgress": "In Corso",
+      "ended": "Terminata",
+      "roundNumber": "Numero round",
+      "points": "Punti",
+      "actions": "Azioni"
+    }
+  },
+  "rounds": {
+    "messages": {
+      "askDelete": "Sei sicuro di voler eliminare il round #{id} per l'utente {username}?",
+      "deleteSuccess": "Round eliminato con successo",
+      "creationSuccess": "Round creato con successo",
+      "updateSuccess": "Round salvato con successo"
+    },
+    "labels": {
+      "numRoundsPlayed": "{number} round giocati",
+      "noRoundsForThisMatch": "Nessun round trovato per questa partita. Creane subito uno!",
+      "editRound": "Modifica round {id}",
+      "createRound": "Crea round"
     }
   },
   "buttons": {
@@ -39,21 +72,37 @@
     "logout": "Logout",
     "settings": "Impostazioni",
     "signInAs": "Entrato come",
-    "addNew": "Add new",
+    "addNew": "Crea nuovo",
     "darkMode": "Dark mode",
-    "add": "Add",
-    "save": "Save",
-    "cancel": "Cancel",
-    "addRound": "Add round"
+    "add": "Crea",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "addRound": "Aggiungi round",
+    "edit": "Modifica",
+    "endMatch": "Termina Partita",
+    "delete": "Elimina"
   },
   "emptyContent": {
-    "users": "No users found"
+    "users": "Nessun utente trovato"
+  },
+  "placeholders": {
+    "selectUsers": "Seleziona giocatori",
+    "selectLocation": "Seleziona la casata",
+    "searchByUsername": "Ricerca per username...",
+    "searchByName": "Ricerca per nome...",
+    "enterRoundNumber": "Inserisci il numero del round",
+    "enterPointsScored": "Inserisci il numero di punti effettuati in questo round",
+    "enterMaximumPointsPerMatch": "Inserisci il numero massimo di punti da raggiungere"
   },
   "labels": {
     "username": "Username",
     "password": "Password",
-    "name": "Name",
-    "address": "Address",
-    "associatedUsers": "Users associated"
+    "name": "Nome",
+    "address": "Indirizzo",
+    "associatedUsers": "Giocatori associati",
+    "all": "Tutti",
+    "players": "Giocatori",
+    "totalPoints": "Punti totali",
+    "location": "Casata"
   }
 }

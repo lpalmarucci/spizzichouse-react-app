@@ -52,8 +52,8 @@ function CreateEditMatchDialog({
       : ApiEndpoint.createMatch;
     // const method = round ? 'PATCH' : 'POST';
     const successMessage = match
-      ? 'Match saved successfully'
-      : 'Match created successfully';
+      ? t('matches.messages.updateSuccess')
+      : t('matches.messages.creationSuccess');
 
     const locationId = selectedLocation
       ? Number(Array.from(selectedLocation.values()).at(0))
@@ -116,13 +116,15 @@ function CreateEditMatchDialog({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1 ">
-              {match ? 'Edit match' : 'Create match'}
+              {match
+                ? t('matches.editTitle').replace('{id}', match.id.toString())
+                : t('matches.createTitle')}
             </ModalHeader>
             <ModalBody>
               <Select
                 autoFocus
-                label={'Users'}
-                placeholder="Select the users"
+                label={t('labels.players')}
+                placeholder={t('placeholders.selectUsers')}
                 selectionMode="multiple"
                 variant="bordered"
                 isRequired={true}
@@ -147,8 +149,8 @@ function CreateEditMatchDialog({
                 <Input
                   type="number"
                   min={0}
-                  label="Total points"
-                  placeholder="Enter the maximun points to reach"
+                  label={t('labels.totalPoints')}
+                  placeholder={t('placeholders.enterMaximumPointsPerMatch')}
                   variant="bordered"
                   isRequired={true}
                   value={totalPoints.toString()}
@@ -157,8 +159,8 @@ function CreateEditMatchDialog({
 
                 <Select
                   isLoading={areLocationLoading}
-                  label={'Location'}
-                  placeholder="Select the location"
+                  label={t('labels.location')}
+                  placeholder={t('placeholders.selectLocation')}
                   variant="bordered"
                   isRequired={true}
                   selectedKeys={selectedLocation}
@@ -180,7 +182,7 @@ function CreateEditMatchDialog({
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={onClose}>
-                Cancel
+                {t('buttons.cancel')}
               </Button>
               <Button
                 color="primary"
