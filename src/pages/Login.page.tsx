@@ -17,7 +17,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   function handleLogin() {
-    fetchData<LoginResponse>(ApiEndpoint.login, 'post', {
+    fetchData<LoginResponse>(ApiEndpoint.login, 'POST', {
       body: JSON.stringify({ username, password }),
     }).then((data) => {
       if (
