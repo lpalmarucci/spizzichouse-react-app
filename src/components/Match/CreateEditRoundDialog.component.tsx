@@ -65,7 +65,7 @@ function CreateEditRoundDialog({
   };
 
   const isFormValid = React.useMemo<boolean>(
-    () => Boolean(match.id && selectedUsers && points && roundId),
+    () => Boolean(match.id && selectedUsers && points >= 0 && roundId),
     [match, selectedUsers, points, roundId],
   );
 
@@ -97,6 +97,7 @@ function CreateEditRoundDialog({
                 placeholder="Select the users"
                 selectionMode="multiple"
                 variant="bordered"
+                isRequired={true}
                 selectedKeys={selectedUsers}
                 onSelectionChange={(keys: Selection) =>
                   setSelectedUsers(keys as Set<string>)
@@ -120,6 +121,7 @@ function CreateEditRoundDialog({
                   label="Round number"
                   placeholder="Enter the round number"
                   variant="bordered"
+                  isRequired={true}
                   isDisabled={Boolean(round)}
                   value={roundId.toString()}
                   onChange={(e) => setRoundId(Number(e.target.value))}
@@ -130,6 +132,7 @@ function CreateEditRoundDialog({
                   label="Points"
                   placeholder="Enter the points scored in this round"
                   variant="bordered"
+                  isRequired={true}
                   value={points.toString()}
                   onChange={(e) => setPoints(Number(e.target.value))}
                 />

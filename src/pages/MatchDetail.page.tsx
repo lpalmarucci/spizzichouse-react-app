@@ -41,11 +41,16 @@ const roundTableColumns = [
 ];
 
 function MatchDetailPage() {
+  const [isLoadingRounds, setLoadingRounds] = useState<boolean>(true);
   const [aggregatedRounds, setAggregatedRounds] = useState<AggregatedRound[]>(
     [],
   );
   const [currentMatch, setCurrentMatch] = useState<Match>({} as Match);
   const [currentRound, setCurrentRound] = useState<Round | undefined>();
+  const filteredRoundTableColumns = React.useMemo(() => {
+    if (currentMatch.inProgress) return roundTableColumns;
+    return roundTableColumns.filter((c) => c.uid !== 'actions');
+  }, [currentMatch]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
     isOpen: isOpenAlertDialog,
@@ -79,15 +84,83 @@ function MatchDetailPage() {
     rounds.reduce((acc, r) => (acc += r.points), 0);
 
   const fetchRounds = React.useCallback(
-    (id: string) =>
-      fetchData<Round[]>(
-        ApiEndpoint.getRoundsByMatchId.replace(':matchId', id),
-        'GET',
-      ).then((data) => {
+    async (id: string) => {
+      try {
+        setLoadingRounds(true);
+        const data = await fetchData<Round[]>(
+          ApiEndpoint.getRoundsByMatchId.replace(':matchId', id),
+          'GET',
+        );
         setAggregatedRounds(aggregateRounds(data));
-      }),
+        return Promise.resolve(data);
+      } catch (e) {
+        return Promise.reject(e);
+      } finally {
+        setLoadingRounds(false);
+      }
+    },
     [id],
   );
+
+  const usersWinning = React.useMemo(() => {
+    if (aggregatedRounds.length === 0) return [];
+    return aggregatedRounds.reduce(
+      (users, currentRound) => {
+        if (users.map((u) => u.id).includes(currentRound.player.id))
+          return users;
+        const minPoints = users[0].points;
+        const currentRoundTotalPoints = calcTotalPoints(currentRound.rounds);
+        const objCurrUser = {
+          id: currentRound.player.id,
+          points: currentRoundTotalPoints,
+        };
+        return currentRoundTotalPoints < minPoints
+          ? [objCurrUser]
+          : currentRoundTotalPoints === minPoints
+          ? [...users, objCurrUser]
+          : users;
+      },
+      [
+        {
+          id: aggregatedRounds[0].player.id,
+          points: calcTotalPoints(aggregatedRounds[0].rounds),
+        },
+      ] as {
+        id: number;
+        points: number;
+      }[],
+    );
+  }, [aggregatedRounds]);
+
+  const usersAtRisk = React.useMemo(() => {
+    if (aggregatedRounds.length === 0) return [];
+    return aggregatedRounds.reduce(
+      (users, currentRound) => {
+        if (users.map((u) => u.id).includes(currentRound.player.id))
+          return users;
+        const maxPoints = users[0].points;
+        const currentRoundTotalPoints = calcTotalPoints(currentRound.rounds);
+        const objCurrUser = {
+          id: currentRound.player.id,
+          points: currentRoundTotalPoints,
+        };
+        return currentRoundTotalPoints > maxPoints
+          ? [objCurrUser]
+          : currentRoundTotalPoints === maxPoints
+          ? [...users, objCurrUser]
+          : users;
+      },
+      [
+        {
+          id: aggregatedRounds[0].player.id,
+          points: calcTotalPoints(aggregatedRounds[0].rounds),
+        },
+      ] as {
+        id: number;
+        points: number;
+      }[],
+    );
+  }, [aggregatedRounds]);
 
   useEffect(() => {
     if (!id) return;
@@ -152,6 +225,8 @@ function MatchDetailPage() {
     }
   }, []);
 
+  console.log({ currentMatch });
+
   return (
     <div className="flex flex-col gap-12 items-center align-middle mx-auto w-full px-6 max-w-7xl">
       <h1 className="mt-4 text-5xl md:text-6xl text-foreground font-bold">
@@ -171,66 +246,73 @@ function MatchDetailPage() {
             onPress={() => {
               onOpen();
             }}
+            className={`${!currentMatch.inProgress && 'hidden'}`}
             endContent={<PlusIcon />}
           >
             {t('buttons.addRound')}
           </Button>
         </div>
-        {aggregatedRounds.length > 0 ? (
+        {isLoadingRounds ? (
+          <Spinner label={t('loading')} />
+        ) : aggregatedRounds.length > 0 ? (
           <Accordion variant="shadow" className="w-full">
             {aggregatedRounds.map(({ player, rounds }) => (
               <AccordionItem
                 key={player.id}
                 aria-label={`${player.firstname} ${player.lastname}`}
+                classNames={{
+                  title: usersAtRisk.find((u) => u.id === player.id)
+                    ? 'text-danger'
+                    : usersWinning.find((u) => u.id === player.id)
+                    ? 'text-success'
+                    : 'text-primary',
+                }}
                 startContent={
                   <Avatar
                     isBordered
-                    color="primary"
+                    color={
+                      usersAtRisk.find((u) => u.id === player.id)
+                        ? 'danger'
+                        : usersWinning.find((u) => u.id === player.id)
+                        ? 'success'
+                        : 'primary'
+                    }
                     radius="lg"
                     name={getInitialLetters(player.firstname, player.lastname)}
                   />
                 }
-                subtitle={`${rounds.length} rounds already played`}
+                subtitle={`${rounds.length} rounds played`}
                 title={
                   <div className="w-full flex justify-between items-center relative">
                     <span>{`${player.firstname} ${player.lastname}`}</span>
-                    <span className="absolute top-1/3 right-0 text-primary-400">
+                    <span className="absolute top-1/3 right-0">
                       {calcTotalPoints(rounds)}
                     </span>
                   </div>
                 }
               >
                 <div className="flex gap-5 p-8 pt-2">
-                  {rounds.length > 0 ? (
-                    <Table color="primary">
-                      <TableHeader columns={roundTableColumns}>
-                        {(column) => (
-                          <TableColumn key={column.uid}>
-                            {column.name}
-                          </TableColumn>
-                        )}
-                      </TableHeader>
-                      <TableBody
-                        emptyContent={t('emptyContent.Locations')}
-                        items={rounds}
-                        loadingContent={<Spinner label={t('loading')} />}
-                      >
-                        {(r) => (
-                          <TableRow
-                            key={`${r.roundId}-${r.userId}-${r.matchId}`}
-                          >
-                            {(columnKey) => (
-                              <TableCell>{renderCell(r, columnKey)}</TableCell>
-                            )}
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                  ) : (
-                    <h1 className="text-center text-xl text-foreground">
-                      No rounds found
-                    </h1>
-                  )}
+                  <Table color="primary">
+                    <TableHeader columns={filteredRoundTableColumns}>
+                      {(column) => (
+                        <TableColumn key={column.uid}>
+                          {column.name}
+                        </TableColumn>
+                      )}
+                    </TableHeader>
+                    <TableBody
+                      emptyContent={t('emptyContent.Locations')}
+                      items={rounds}
+                    >
+                      {(r) => (
+                        <TableRow key={`${r.roundId}-${r.userId}-${r.matchId}`}>
+                          {(columnKey) => (
+                            <TableCell>{renderCell(r, columnKey)}</TableCell>
+                          )}
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
                 </div>
               </AccordionItem>
             ))}

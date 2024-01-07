@@ -24,6 +24,7 @@ import useFetch from '../../hooks/useFetch.tsx';
 import { ApiEndpoint } from '../../models/constants.ts';
 import { useToast } from '../../context/Toast.context.tsx';
 import AlertDialog from '../AlertDialog.component.tsx';
+import CreateEditMatchDialog from '../Match/CreateEditMatchDialog.component.tsx';
 
 function MatchList({
   matches,
@@ -35,6 +36,11 @@ function MatchList({
   const navigate = useNavigate();
   const fetchData = useFetch();
   const [selectedMatch, setSelectedMatch] = useState<Match | undefined>();
+  const {
+    isOpen: isOpenEditMatchDialog,
+    onOpen: onOpenEditMatchDialog,
+    onOpenChange: onOpenChangeEditMatchDialog,
+  } = useDisclosure();
   const {
     isOpen: isOpenEndMatchDialog,
     onOpen: onOpenEndMatchDialog,
@@ -80,7 +86,7 @@ function MatchList({
 
   return (
     <>
-      <div className="gap-2 gap-y-10 grid grid-cols-2 sm:grid-cols-4">
+      <div className="w-full flex flex-wrap gap-2 gap-y-10 ">
         {matches.map((match, index) => (
           <Card
             shadow="md"
@@ -132,7 +138,15 @@ function MatchList({
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem key="edit">Modifica</DropdownItem>
+                  <DropdownItem
+                    key="edit"
+                    onPress={() => {
+                      onOpenEditMatchDialog();
+                      setSelectedMatch(match);
+                    }}
+                  >
+                    Modifica
+                  </DropdownItem>
                   <DropdownItem
                     key="end_match"
                     color="warning"
@@ -163,10 +177,15 @@ function MatchList({
           </Card>
         ))}
       </div>
+      <CreateEditMatchDialog
+        isOpen={isOpenEditMatchDialog}
+        onOpenChange={onOpenChangeEditMatchDialog}
+        match={selectedMatch}
+      />
       <AlertDialog
         isOpen={isOpenEndMatchDialog}
         onOpenChange={onOpenChangeEndMatchDialog}
-        contentText={'Are you sure you want to end the match?'}
+        contentText={`Are you sure you want to end the match #${selectedMatch?.id}?`}
         onConfirm={handleEndMatch}
         confirmButtonText="Confirm"
       />

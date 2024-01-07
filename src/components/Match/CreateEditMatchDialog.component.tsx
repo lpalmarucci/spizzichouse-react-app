@@ -15,10 +15,10 @@ import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
 import { useTranslation } from 'react-i18next';
-import { Round } from '../../models/Round.ts';
 import { Match } from '../../models/Match.ts';
 import { Location } from '../../models/Location.ts';
 import { Player } from '../../models/Player.ts';
+import { useNavigate } from 'react-router-dom';
 
 interface ICreateEditRoundProps {
   match?: Match;
@@ -35,7 +35,7 @@ function CreateEditMatchDialog({
 }: ICreateEditRoundProps) {
   const fetchData = useFetch();
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   const [areUsersLoading, setAreUsersLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Player[]>([]);
   const [areLocationLoading, setAreLocationLoading] = useState<boolean>(true);
@@ -67,20 +67,22 @@ function CreateEditMatchDialog({
       userIds,
       inProgress: true,
     });
-    console.log({ body });
     const method = match ? 'PATCH' : 'POST';
 
-    return fetchData<Round>(url, method, { body }).then(() => {
+    return fetchData<Match>(url, method, { body }).then((data) => {
       setTotalPoints(0);
       setSelectedLocation(new Set());
       setSelectedUsers(new Set());
       showAlertMessage({ message: successMessage, type: 'success' });
+      navigate(`/matches/${data.id}`);
     });
   };
 
   const isFormValid = React.useMemo<boolean>(
     () =>
-      Boolean(totalPoints > 0 && selectedUsers.size > 0 && selectedLocation),
+      Boolean(
+        totalPoints > 0 && selectedUsers.size > 0 && selectedLocation.size > 0,
+      ),
     [selectedUsers, totalPoints, selectedLocation],
   );
 
@@ -94,14 +96,14 @@ function CreateEditMatchDialog({
       .finally(() => setAreLocationLoading(false));
   }, []);
 
-  //
-  // useEffect(() => {
-  //   if (round) {
-  //     setRoundId(round.roundId);
-  //     setSelectedUsers(new Set([round.user.id.toString()]));
-  //     setTotalPoints(round.points);
-  //   }
-  // }, [round]);
+  useEffect(() => {
+    if (match) {
+      console.log({ match });
+      setSelectedLocation(new Set(match.location?.id.toString() ?? '-1'));
+      setSelectedUsers(new Set(match.users.map((user) => user.id.toString())));
+      setTotalPoints(match.totalPoints);
+    }
+  }, [match]);
 
   return (
     <Modal
@@ -123,6 +125,8 @@ function CreateEditMatchDialog({
                 placeholder="Select the users"
                 selectionMode="multiple"
                 variant="bordered"
+                isRequired={true}
+                isDisabled={!!match}
                 isLoading={areUsersLoading}
                 selectedKeys={selectedUsers}
                 onSelectionChange={(keys: Selection) =>
@@ -146,16 +150,17 @@ function CreateEditMatchDialog({
                   label="Total points"
                   placeholder="Enter the maximun points to reach"
                   variant="bordered"
+                  isRequired={true}
                   value={totalPoints.toString()}
                   onChange={(e) => setTotalPoints(Number(e.target.value))}
                 />
 
                 <Select
-                  autoFocus
                   isLoading={areLocationLoading}
                   label={'Location'}
                   placeholder="Select the location"
                   variant="bordered"
+                  isRequired={true}
                   selectedKeys={selectedLocation}
                   onSelectionChange={(keys: Selection) =>
                     setSelectedLocation(keys as Set<string>)
