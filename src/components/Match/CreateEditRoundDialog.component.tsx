@@ -57,12 +57,16 @@ function CreateEditRoundDialog({
     );
 
     return Promise.all(promises).then(() => {
-      setPoints(0);
-      setRoundId(0);
-      setSelectedUsers(new Set());
+      clearAllFields();
       showAlertMessage({ message: successMessage, type: 'success' });
     });
   };
+
+  function clearAllFields() {
+    setPoints(0);
+    setRoundId(0);
+    setSelectedUsers(new Set());
+  }
 
   const isFormValid = React.useMemo<boolean>(
     () => Boolean(match.id && selectedUsers && points >= 0 && roundId),
@@ -152,6 +156,7 @@ function CreateEditRoundDialog({
                 onPress={async () => {
                   await handleSaveRound();
                   if (onCloseDialog) onCloseDialog();
+                  clearAllFields();
                   onClose();
                 }}
                 isDisabled={!isFormValid}

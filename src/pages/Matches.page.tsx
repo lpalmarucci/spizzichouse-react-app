@@ -74,7 +74,7 @@ function MatchesPage() {
           {t('buttons.addNew')}
         </Button>
       </div>
-      <MatchList matches={filteredMatches} fetchAllMatches={getMatches} />
+      <MatchList matches={filteredMatches} getAllMatches={getMatches} />
       <CreateEditMatchDialog
         isOpen={isOpen}
         onOpenChange={onOpenChange}
