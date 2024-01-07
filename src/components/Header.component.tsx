@@ -51,6 +51,7 @@ const Header = () => {
   }
 
   function handleLogout() {
+    localStorage.clear();
     if (signOut()) {
       navigate(ROUTES.Login);
     }
