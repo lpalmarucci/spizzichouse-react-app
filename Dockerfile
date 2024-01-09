@@ -1,5 +1,5 @@
 FROM node:20-alpine as build
-# Set the working directory to /app
+# Set the working directory to /usr/app
 WORKDIR /usr/app
 # Copy the package.json and package-lock.json to the container
 COPY package*.json ./
@@ -10,7 +10,7 @@ COPY . .
 # Build the React app
 RUN npm run build
 # Use an official Nginx runtime as a parent image
-FROM nginx:latest
+FROM nginx:latest as prod
 # Copy the ngnix.conf to the container
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 # Copy the React app build files to the container
