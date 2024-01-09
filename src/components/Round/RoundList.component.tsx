@@ -67,6 +67,7 @@ function RoundList({
       <Accordion variant="shadow" className="w-full">
         {listRounds.map((aggregatedRound) => (
           <AccordionItem
+            key={aggregatedRound.player.id}
             aria-labelledby={`List of rounds for user ${aggregatedRound.player.id}`}
             aria-label={`${aggregatedRound.player.firstname} ${aggregatedRound.player.lastname}`}
             classNames={{
