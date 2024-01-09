@@ -27,12 +27,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   useEffect(() => {
-    toggleTheme();
+    storedValue === 'dark'
+      ? rootElement.classList.add('dark')
+      : rootElement.classList.add('light');
   }, []);
 
   const toggleTheme = React.useCallback(() => {
     setTheme((prev) => {
-      if (prev === 'dark') {
+      if (theme === 'dark') {
         rootElement.classList.remove('dark');
         rootElement.classList.add('light');
       } else {
