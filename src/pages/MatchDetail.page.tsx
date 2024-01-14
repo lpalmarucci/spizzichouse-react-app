@@ -139,6 +139,7 @@ function MatchDetailPage() {
 
         <CreateEditRoundDialog
           match={currentMatch}
+          listRounds={aggregatedRounds}
           isOpen={isOpen}
           onOpenChange={onOpenChange}
           onCloseDialog={() => fetchRounds(id!)}

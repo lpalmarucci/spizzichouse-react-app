@@ -122,6 +122,7 @@ function RoundList({
       <CreateEditRoundDialog
         match={currentMatch}
         round={currentRound}
+        listRounds={listRounds}
         isOpen={isOpenEditRoundDialog}
         onOpenChange={onOpenChangeEditRoundDialog}
         onCloseDialog={() => getAllRounds(currentMatch.id.toString())}

@@ -15,11 +15,12 @@ import { ApiEndpoint } from '../../../models/constants.ts';
 import useFetch from '../../../hooks/useFetch.tsx';
 import { useToast } from '../../../context/Toast.context.tsx';
 import { useTranslation } from 'react-i18next';
-import { Round } from '../../../models/Round.ts';
+import { AggregatedRound, Round } from '../../../models/Round.ts';
 import { Match } from '../../../models/Match.ts';
 
 interface ICreateEditRoundProps {
   round?: Round;
+  listRounds: AggregatedRound[];
   match: Match;
   isOpen: boolean;
   onOpenChange: () => void;
@@ -29,6 +30,7 @@ interface ICreateEditRoundProps {
 function CreateEditRoundDialog({
   isOpen,
   round,
+  listRounds,
   match,
   onOpenChange,
   onCloseDialog,
@@ -36,13 +38,23 @@ function CreateEditRoundDialog({
   const fetchData = useFetch();
   const { t } = useTranslation();
   const [points, setPoints] = useState<number>(0);
-  const [roundId, setRoundId] = useState<number>(0);
-  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
+  const [selectedUser, setSelectedUser] = useState<Set<string>>(new Set());
+
+  const roundNumber = React.useMemo<number>(() => {
+    if (round) return round.roundId;
+    if (selectedUser.size === 0) return 1;
+
+    const userId = Number(Array.from(selectedUser.values()).at(0));
+    const userRounds = listRounds.find((r) => r.player.id === userId);
+    if (!userRounds) return 1;
+    return userRounds.rounds[userRounds.rounds.length - 1].roundId + 1;
+  }, [listRounds, selectedUser]);
+
   const { showAlertMessage } = useToast();
   const handleSaveRound = () => {
     const url = ApiEndpoint.createRound
       .replace(':matchId', match.id.toString())
-      .replace(':roundId', roundId.toString());
+      .replace(':roundId', roundNumber.toString());
     // const method = round ? 'PATCH' : 'POST';
     const successMessage = round
       ? t('rounds.messages.updateSuccess')
@@ -50,7 +62,7 @@ function CreateEditRoundDialog({
     const body = JSON.stringify({ points });
     const method = round ? 'PATCH' : 'POST';
 
-    const promises = Array.from(selectedUsers.values()).map((userId) =>
+    const promises = Array.from(selectedUser.values()).map((userId) =>
       fetchData<Round>(url.replace(':userId', userId.toString()), method, {
         body,
       }),
@@ -64,19 +76,17 @@ function CreateEditRoundDialog({
 
   function clearAllFields() {
     setPoints(0);
-    setRoundId(0);
-    setSelectedUsers(new Set());
+    setSelectedUser(new Set());
   }
 
   const isFormValid = React.useMemo<boolean>(
-    () => Boolean(match.id && selectedUsers && points >= 0 && roundId),
-    [match, selectedUsers, points, roundId],
+    () => Boolean(match.id && selectedUser && points >= 0 && roundNumber > 0),
+    [match, selectedUser, points, roundNumber],
   );
 
   useEffect(() => {
     if (round) {
-      setRoundId(round.roundId);
-      setSelectedUsers(new Set([round.user.id.toString()]));
+      setSelectedUser(new Set([round.user.id.toString()]));
       setPoints(round.points);
     }
   }, [round]);
@@ -104,12 +114,11 @@ function CreateEditRoundDialog({
                 autoFocus
                 label={t('labels.players')}
                 placeholder={t('placeholders.selectUsers')}
-                selectionMode="multiple"
                 variant="bordered"
                 isRequired={true}
-                selectedKeys={selectedUsers}
+                selectedKeys={selectedUser}
                 onSelectionChange={(keys: Selection) =>
-                  setSelectedUsers(keys as Set<string>)
+                  setSelectedUser(keys as Set<string>)
                 }
                 isDisabled={Boolean(round)}
               >
@@ -131,9 +140,8 @@ function CreateEditRoundDialog({
                   placeholder={t('placeholders.enterRoundNumber')}
                   variant="bordered"
                   isRequired={true}
-                  isDisabled={Boolean(round)}
-                  value={roundId.toString()}
-                  onChange={(e) => setRoundId(Number(e.target.value))}
+                  isDisabled={true}
+                  value={roundNumber.toString()}
                 />
                 <Input
                   type="number"
