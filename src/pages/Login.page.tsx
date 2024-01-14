@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Title from '../components/Title.component';
 import { useSignIn } from 'react-auth-kit';
 import useFetch from '../hooks/useFetch';
-import { LoginResponse } from '../models/Login';
+import { AuthData } from '../models/Auth.ts';
 import { useNavigate } from 'react-router-dom';
 import { ApiEndpoint } from '../models/constants';
 
@@ -17,9 +17,10 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   function handleLogin() {
-    fetchData<LoginResponse>(ApiEndpoint.login, 'POST', {
+    fetchData<AuthData>(ApiEndpoint.login, 'POST', {
       body: JSON.stringify({ username, password }),
     }).then((data) => {
+      console.log({ data });
       if (
         signIn({
           token: data.access_token,
@@ -27,7 +28,7 @@ const LoginPage = () => {
           authState: data,
           //TODO
           // get this data from the response
-          expiresIn: 1695939469,
+          expiresIn: data.expiresIn,
         })
       ) {
         navigate('/');
