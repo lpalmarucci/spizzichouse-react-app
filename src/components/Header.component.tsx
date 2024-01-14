@@ -115,7 +115,7 @@ const Header = () => {
 
       <NavbarContent
         as="div"
-        className=" gap-0 md: gap-3 lg:gap-10"
+        className="gap-0 md:gap-3 lg:gap-10"
         justify="end"
       >
         <Dropdown placement="bottom-end" showArrow>

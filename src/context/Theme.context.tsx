@@ -41,11 +41,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         rootElement.classList.remove('light');
         rootElement.classList.add('dark');
       }
-      const newTheme = prev === 'light' ? 'dark' : 'light';
+      const newTheme: Theme = prev === 'light' ? 'dark' : 'light';
       saveValueToLocalStorage(newTheme);
       return newTheme;
     });
-  }, []);
+  }, [theme, setTheme]);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
