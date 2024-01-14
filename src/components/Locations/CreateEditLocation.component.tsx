@@ -99,14 +99,14 @@ function CreateEditLocationDialog({
               <Input
                 autoFocus
                 label={t('labels.name')}
-                placeholder="Enter the name"
+                placeholder={t('placeholders.enterName')}
                 variant="bordered"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
               <Input
                 label={t('labels.address')}
-                placeholder="Enter the address"
+                placeholder={t('placeholders.enterAddress')}
                 variant="bordered"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
@@ -114,7 +114,7 @@ function CreateEditLocationDialog({
               <Select
                 isLoading={isUsersLoading}
                 label={t('labels.associatedUsers')}
-                placeholder="Select the users"
+                placeholder={t('placeholders.selectUsers')}
                 selectionMode="multiple"
                 variant="bordered"
                 selectedKeys={selectedUsers}

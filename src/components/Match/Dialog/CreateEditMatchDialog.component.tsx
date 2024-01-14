@@ -46,11 +46,10 @@ function CreateEditMatchDialog({
   const [totalPoints, setTotalPoints] = useState<number>(0);
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const { showAlertMessage } = useToast();
-  const handleSaveMatch = () => {
+  const handleSaveMatch = async () => {
     const url = match
       ? ApiEndpoint.updateMatch.replace(':id', match.id.toString())
       : ApiEndpoint.createMatch;
-    // const method = round ? 'PATCH' : 'POST';
     const successMessage = match
       ? t('matches.messages.updateSuccess')
       : t('matches.messages.creationSuccess');
@@ -74,16 +73,13 @@ function CreateEditMatchDialog({
       setSelectedLocation(new Set());
       setSelectedUsers(new Set());
       showAlertMessage({ message: successMessage, type: 'success' });
-      navigate(`/matches/${data.id}`);
+      if (!match) navigate(`/matches/${data.id}`);
     });
   };
 
   const isFormValid = React.useMemo<boolean>(
-    () =>
-      Boolean(
-        totalPoints > 0 && selectedUsers.size > 0 && selectedLocation.size > 0,
-      ),
-    [selectedUsers, totalPoints, selectedLocation],
+    () => Boolean(totalPoints > 0 && selectedUsers.size > 0),
+    [selectedUsers, totalPoints],
   );
 
   useEffect(() => {
@@ -98,7 +94,7 @@ function CreateEditMatchDialog({
 
   useEffect(() => {
     if (match) {
-      setSelectedLocation(new Set(match.location?.id.toString() ?? '-1'));
+      setSelectedLocation(new Set(match.location?.id.toString() ?? undefined));
       setSelectedUsers(new Set(match.users.map((user) => user.id.toString())));
       setTotalPoints(match.totalPoints);
     }
@@ -134,15 +130,21 @@ function CreateEditMatchDialog({
                   setSelectedUsers(keys as Set<string>)
                 }
               >
-                {users.map((user) => (
-                  <SelectItem
-                    key={user.id}
-                    value={user.id}
-                    textValue={user.username}
-                  >
-                    {user.firstname} {user.lastname}
+                {users.length > 0 ? (
+                  users.map((user) => (
+                    <SelectItem
+                      key={user.id}
+                      value={user.id}
+                      textValue={user.username}
+                    >
+                      {user.firstname} {user.lastname}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem key="no-user" isDisabled>
+                    {t('players.not_available')}
                   </SelectItem>
-                ))}
+                )}
               </Select>
               <div className="flex gap-1">
                 <Input
@@ -161,21 +163,26 @@ function CreateEditMatchDialog({
                   label={t('labels.location')}
                   placeholder={t('placeholders.selectLocation')}
                   variant="bordered"
-                  isRequired={true}
                   selectedKeys={selectedLocation}
                   onSelectionChange={(keys: Selection) =>
                     setSelectedLocation(keys as Set<string>)
                   }
                 >
-                  {locations.map((location) => (
-                    <SelectItem
-                      key={location.id}
-                      value={location.id}
-                      textValue={location.name}
-                    >
-                      {location.name}
+                  {locations.length > 0 ? (
+                    locations.map((location) => (
+                      <SelectItem
+                        key={location.id}
+                        value={location.id}
+                        textValue={location.name}
+                      >
+                        {location.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem key="no-location" isDisabled>
+                      {t('locations.not_available')}
                     </SelectItem>
-                  ))}
+                  )}
                 </Select>
               </div>
             </ModalBody>

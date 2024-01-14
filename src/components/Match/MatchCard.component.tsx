@@ -179,6 +179,7 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
         isOpen={isOpenEditMatchDialog}
         onOpenChange={onOpenChangeEditMatchDialog}
         match={selectedMatch}
+        onCloseDialog={getAllMatches}
       />
       <AlertDialog
         isOpen={isOpenEndMatchDialog}

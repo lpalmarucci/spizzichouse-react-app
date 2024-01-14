@@ -209,7 +209,7 @@ export default function LocationsPage() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder={t('locations.searchPlaceholder')}
+            placeholder={t('placeholders.searchByName')}
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={onClear}
@@ -354,7 +354,7 @@ export default function LocationsPage() {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={t('emptyContent.Locations')}
+          emptyContent={t('locations.not_available')}
           items={items}
           isLoading={isLoading}
           loadingContent={<Spinner label={t('loading')} />}

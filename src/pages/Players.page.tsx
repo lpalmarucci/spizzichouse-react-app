@@ -326,7 +326,7 @@ export default function PlayersPage() {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={t('emptyContent.users')}
+          emptyContent={t('players.not_available')}
           items={items}
           isLoading={isLoading}
           loadingContent={<Spinner label={t('loading')} />}
