@@ -20,14 +20,11 @@ const LoginPage = () => {
     fetchData<AuthData>(ApiEndpoint.login, 'POST', {
       body: JSON.stringify({ username, password }),
     }).then((data) => {
-      console.log({ data });
       if (
         signIn({
           token: data.access_token,
           tokenType: 'Bearer',
           authState: data,
-          //TODO
-          // get this data from the response
           expiresIn: data.expiresIn,
         })
       ) {
