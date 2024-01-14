@@ -1,5 +1,5 @@
 import MatchList from '../components/Match/MatchList.component.tsx';
-import { Button, Tab, Tabs, useDisclosure } from '@nextui-org/react';
+import { Button, Spinner, Tab, Tabs, useDisclosure } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { useTranslation } from 'react-i18next';
 import CreateEditMatchDialog from '../components/Match/Dialog/CreateEditMatchDialog.component.tsx';
@@ -15,6 +15,7 @@ function MatchesPage() {
   const { t } = useTranslation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const fetchData = useFetch();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedMatchFilter, setSelectedMatchFilter] =
     useState<Filter['key']>();
@@ -39,11 +40,14 @@ function MatchesPage() {
 
   const getMatches = async () => {
     try {
+      setIsLoading(true);
       const data = await fetchData<Match[]>(ApiEndpoint.getMatches, 'GET');
       setMatches(data);
       return Promise.resolve(data);
     } catch (e) {
       return Promise.reject(e);
+    } finally {
+      setIsLoading(false);
     }
   };
   const filteredMatches = React.useMemo<Match[]>(() => {
@@ -78,7 +82,12 @@ function MatchesPage() {
           {t('buttons.addNew')}
         </Button>
       </div>
-      <MatchList matches={filteredMatches} getAllMatches={getMatches} />
+      {isLoading ? (
+        <Spinner label={t('loading')} />
+      ) : (
+        <MatchList matches={filteredMatches} getAllMatches={getMatches} />
+      )}
+
       <CreateEditMatchDialog
         isOpen={isOpen}
         onOpenChange={onOpenChange}
