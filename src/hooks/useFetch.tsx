@@ -32,8 +32,10 @@ export default function useFetch() {
       headers,
     });
 
-    if (redirectResponseWithStatus.includes(response.status))
+    if (redirectResponseWithStatus.includes(response.status)) {
+      localStorage.clear();
       navigate(ROUTES.Login, { replace: true });
+    }
 
     const data = (await response.json()) as T | ApiError;
 
