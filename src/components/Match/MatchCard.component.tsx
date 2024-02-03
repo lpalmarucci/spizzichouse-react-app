@@ -92,7 +92,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
         onPress={() => navigate(match.id.toString())}
         as="div"
         classNames={{
-          base: 'flex-grow sm:flex-grow-0',
+          base: 'flex-grow lg:flex-grow-0',
         }}
       >
         <CardHeader className="justify-between gap-8 pb-0">

@@ -12,20 +12,22 @@ function MatchList({
   const { t } = useTranslation();
   return (
     <>
-      <div className="w-full flex flex-col flex-wrap sm:flex-row justify-start gap-2 gap-y-10 overflow-auto">
-        {matches.length > 0 ? (
-          matches.map((match) => (
-            <MatchCard
-              key={match.id}
-              match={match}
-              getAllMatches={getAllMatches}
-            />
-          ))
-        ) : (
-          <h1 className="w-full text-center text-xl">
-            {t('matches.not_available')}
-          </h1>
-        )}
+      <div className="w-full  max-w-5xl">
+        <div className="flex flex-col flex-wrap sm:flex-row gap-2 gap-y-10 overflow-auto">
+          {matches.length > 0 ? (
+            matches.map((match) => (
+              <MatchCard
+                key={match.id}
+                match={match}
+                getAllMatches={getAllMatches}
+              />
+            ))
+          ) : (
+            <h1 className="w-full text-center text-xl">
+              {t('matches.not_available')}
+            </h1>
+          )}
+        </div>
       </div>
     </>
   );
