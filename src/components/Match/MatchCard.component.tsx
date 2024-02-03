@@ -32,7 +32,7 @@ interface IMatchCardProps {
   getAllMatches: () => Promise<Match[]>;
 }
 
-function MatchCard({ match, getAllMatches }: IMatchCardProps) {
+export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
   const [selectedMatch, setSelectedMatch] = useState<Match | undefined>();
   const {
     isOpen: isOpenEditMatchDialog,
@@ -56,10 +56,9 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
 
   const handleEndMatch = React.useCallback(() => {
     if (!selectedMatch) return;
-    const url = ApiEndpoint.updateMatch.replace(
-      ':id',
-      selectedMatch?.id.toString(),
-    );
+    const url = ApiEndpoint.updateMatch
+      .replace(':id', selectedMatch?.id.toString())
+      .concat('?end=true');
     const body = JSON.stringify({ inProgress: false });
     fetchData<Match>(url, 'PATCH', { body }).then(() => {
       showAlertMessage({
@@ -68,7 +67,7 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       });
       getAllMatches();
     });
-  }, [selectedMatch]);
+  }, [selectedMatch, setSelectedMatch]);
 
   const handleDeleteMatch = React.useCallback(() => {
     if (!selectedMatch) return;
@@ -83,7 +82,7 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       });
       getAllMatches();
     });
-  }, [selectedMatch]);
+  }, [selectedMatch, setSelectedMatch]);
 
   return (
     <>
@@ -203,6 +202,3 @@ function MatchCard({ match, getAllMatches }: IMatchCardProps) {
     </>
   );
 }
-
-// eslint-disable-next-line react-refresh/only-export-components
-export default React.memo(MatchCard);

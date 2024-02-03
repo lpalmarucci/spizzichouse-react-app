@@ -31,7 +31,7 @@ function MatchesPage() {
         text: t('matches.labels.inProgress'),
       },
     ],
-    [],
+    [t],
   );
 
   useEffect(() => {
@@ -79,7 +79,7 @@ function MatchesPage() {
           endContent={<PlusIcon />}
           onPress={onOpen}
         >
-          {t('buttons.addNew')}
+          {t('buttons.crateNewMatch')}
         </Button>
       </div>
       {isLoading ? (
