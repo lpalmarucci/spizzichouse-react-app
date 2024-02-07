@@ -3,6 +3,7 @@ import { ApiError } from '../models/ApiError';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../routes/common.routes';
 import { useToast } from '../context/Toast.context';
+import { useEffect, useRef } from 'react';
 
 const redirectResponseWithStatus = [401, 403];
 
@@ -12,6 +13,11 @@ export default function useFetch() {
   const navigate = useNavigate();
   const auth = useAuthUser();
   const { showAlertMessage } = useToast();
+  const abortController = useRef<AbortController>(new AbortController());
+
+  useEffect(() => {
+    return () => abortController.current.abort()
+  }, [])
 
   async function fetchData<T>(
     url: string,
@@ -30,9 +36,11 @@ export default function useFetch() {
       ...options,
       method,
       headers,
+      signal: abortController.current.signal
     });
 
     if (redirectResponseWithStatus.includes(response.status)) {
+      showAlertMessage({ message: 'Non autorizzato', type: 'error' })
       localStorage.clear();
       navigate(ROUTES.Login, { replace: true });
     }

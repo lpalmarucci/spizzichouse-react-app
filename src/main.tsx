@@ -11,22 +11,22 @@ import { ToastProvider } from './context/Toast.context.tsx';
 import { ThemeProvider } from './context/Theme.context.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ErrorBoundary fallback={<h1>Something went wronngs</h1>}>
-      <NextUIProvider>
-        <AuthProvider
-          authType="cookie"
-          authName={'_auth'}
-          cookieDomain={window.location.hostname}
-          cookieSecure={window.location.protocol === 'https:'}
-        >
-          <ThemeProvider>
-            <ToastProvider>
-              <RouterProvider router={router} />
-            </ToastProvider>
-          </ThemeProvider>
-        </AuthProvider>
-      </NextUIProvider>
-    </ErrorBoundary>
-  </React.StrictMode>,
+
+  <ErrorBoundary fallback={<h1>Something went wronngs</h1>}>
+    <NextUIProvider>
+      <AuthProvider
+        authType="cookie"
+        authName={'_auth'}
+        cookieDomain={window.location.hostname}
+        cookieSecure={window.location.protocol === 'https:'}
+      >
+        <ThemeProvider>
+          <ToastProvider>
+            <RouterProvider router={router} />
+          </ToastProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </NextUIProvider>
+  </ErrorBoundary>
+
 );
