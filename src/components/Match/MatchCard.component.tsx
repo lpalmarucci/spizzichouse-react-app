@@ -110,7 +110,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
           )}
         </CardHeader>
         <CardBody className="py-8">
-          <AvatarGroup isBordered size="md" color="default">
+          <AvatarGroup isBordered size="md" color="default" max={3}>
             {match.users.map((player) => (
               <Tooltip
                 key={player.id}
