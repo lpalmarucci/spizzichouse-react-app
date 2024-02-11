@@ -5,7 +5,7 @@ const DashboardPage = () => {
   console.log({ authData });
   return (
     <div className="flex flex-col text-center w-full">
-      <h1 className="text-5xl text-white font-bold">
+      <h1 className="text-5xl text-foreground font-bold">
         Welcome, {authData?.firstname}
       </h1>
     </div>
