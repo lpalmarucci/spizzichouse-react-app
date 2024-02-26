@@ -11,12 +11,12 @@ import {
   SelectItem,
 } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
-import { ApiEndpoint } from '../../../models/constants.ts';
 import useFetch from '../../../hooks/useFetch.tsx';
 import { useToast } from '../../../context/Toast.context.tsx';
 import { useTranslation } from 'react-i18next';
 import { AggregatedRound, Round } from '../../../models/Round.ts';
 import { Match } from '../../../models/Match.ts';
+import ApiEndpoints from '../../../costants/ApiEndpoints.ts';
 
 interface ICreateEditRoundProps {
   round?: Round;
@@ -52,7 +52,7 @@ function CreateEditRoundDialog({
 
   const { showAlertMessage } = useToast();
   const handleSaveRound = () => {
-    const url = ApiEndpoint.createRound
+    const url = ApiEndpoints.createRound
       .replace(':matchId', match.id.toString())
       .replace(':roundId', roundNumber.toString());
     // const method = round ? 'PATCH' : 'POST';

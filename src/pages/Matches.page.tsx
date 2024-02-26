@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import CreateEditMatchDialog from '../components/Match/Dialog/CreateEditMatchDialog.component.tsx';
 import React, { useEffect, useState } from 'react';
 import { Match } from '../models/Match.ts';
-import { ApiEndpoint } from '../models/constants.ts';
 import useFetch from '../hooks/useFetch.tsx';
+import ApiEndpoints from '../costants/ApiEndpoints.ts';
 
 //Fetch here all the matches available
 type Filter = { key: 'all' | 'in_progress'; text: string };
@@ -41,7 +41,7 @@ function MatchesPage() {
   const getMatches = async () => {
     try {
       setIsLoading(true);
-      const data = await fetchData<Match[]>(ApiEndpoint.getMatches, 'GET');
+      const data = await fetchData<Match[]>(ApiEndpoints.getMatches, 'GET');
       setMatches(data);
       return Promise.resolve(data);
     } catch (e) {

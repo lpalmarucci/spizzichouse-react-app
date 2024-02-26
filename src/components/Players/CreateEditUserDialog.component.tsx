@@ -11,10 +11,10 @@ import LockIcon from '../../icons/LockIcon.tsx';
 import { TagUserLinearIcon } from '../../icons/TagUserIcon.tsx';
 import React, { useEffect, useState } from 'react';
 import { Player } from '../../models/Player.ts';
-import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
 import { useTranslation } from 'react-i18next';
+import ApiEndpoints from '../../costants/ApiEndpoints.ts';
 
 interface ICreateEditUserProps {
   user?: Player;
@@ -38,8 +38,8 @@ function CreateEditUserDialogComponent({
   const { showAlertMessage } = useToast();
   const handleSaveUser = () => {
     const url = user
-      ? ApiEndpoint.updateUser.replace(':id', user.id.toString())
-      : ApiEndpoint.createUser;
+      ? ApiEndpoints.updateUser.replace(':id', user.id.toString())
+      : ApiEndpoints.createUser;
     const method = user ? 'PATCH' : 'POST';
     const successMessage = user
       ? `User ${username} saved successfully`

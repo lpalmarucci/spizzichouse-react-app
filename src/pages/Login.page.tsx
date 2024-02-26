@@ -6,7 +6,7 @@ import { useSignIn } from 'react-auth-kit';
 import useFetch from '../hooks/useFetch';
 import { AuthData } from '../models/Auth.ts';
 import { useNavigate } from 'react-router-dom';
-import { ApiEndpoint } from '../models/constants';
+import ApiEndpoints from '../costants/ApiEndpoints.ts';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   function handleLogin() {
-    fetchData<AuthData>(ApiEndpoint.login, 'POST', {
+    fetchData<AuthData>(ApiEndpoints.login, 'POST', {
       body: JSON.stringify({ username, password }),
     }).then((data) => {
       if (

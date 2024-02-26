@@ -1,4 +1,4 @@
-export const ApiEndpoint = {
+const ApiEndpoints = {
   //Authentication
   login: '/auth/login',
   //User
@@ -27,3 +27,5 @@ export const ApiEndpoint = {
   createRound: '/matches/:matchId/users/:userId/rounds/:roundId',
   deleteRound: '/matches/:matchId/users/:userId/rounds/:roundId',
 };
+
+export default ApiEndpoints;

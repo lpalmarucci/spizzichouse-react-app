@@ -9,12 +9,12 @@ import { useTranslation } from 'react-i18next';
 import { Match } from '../../models/Match.ts';
 import { AggregatedRound, Round } from '../../models/Round.ts';
 import AlertDialog from '../AlertDialog.component.tsx';
-import { ApiEndpoint } from '../../models/constants.ts';
 import { useToast } from '../../context/Toast.context.tsx';
 import useFetch from '../../hooks/useFetch.tsx';
 import CreateEditRoundDialog from './Dialog/CreateEditRoundDialog.component.tsx';
 import RoundCard from './RoundCard.component.tsx';
 import { getInitialLetters } from '../../shared/utils.tsx';
+import ApiEndpoints from '../../costants/ApiEndpoints.ts';
 
 interface IRoundListProps {
   listRounds: AggregatedRound[];
@@ -48,7 +48,7 @@ function RoundList({
       return;
     }
     const { matchId, userId, roundId } = currentRound;
-    const url = ApiEndpoint.deleteRound
+    const url = ApiEndpoints.deleteRound
       .replace(':matchId', matchId.toString())
       .replace(':userId', userId.toString())
       .replace(':roundId', roundId.toString());

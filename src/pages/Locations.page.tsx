@@ -24,7 +24,6 @@ import {
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { SearchIcon } from '../icons/SearchIcon.tsx';
 import { capitalize, getInitialLetters } from '../shared/utils.tsx';
-import { ApiEndpoint } from '../models/constants.ts';
 import useFetch from '../hooks/useFetch.tsx';
 import EditIcon from '../icons/EditIcon.tsx';
 import { DeleteIcon } from '../icons/DeleteIcon.tsx';
@@ -35,6 +34,7 @@ import { Location } from '../models/Location.ts';
 import { Player } from '../models/Player.ts';
 import AlertDialog from '../components/AlertDialog.component.tsx';
 import CreateEditLocationDialog from '../components/Locations/CreateEditLocation.component.tsx';
+import ApiEndpoints from '../costants/ApiEndpoints.ts';
 
 const alwaysVisibleColumns = ['id', 'actions'];
 
@@ -283,7 +283,7 @@ export default function LocationsPage() {
   ]);
 
   const fetchLocations = () => {
-    fetchData<Location[]>(ApiEndpoint.getLocations, 'GET')
+    fetchData<Location[]>(ApiEndpoints.getLocations, 'GET')
       .then((data) => {
         setLocations(data);
         if (items.length === 1) setPage(1);
@@ -296,7 +296,7 @@ export default function LocationsPage() {
   const handleDeleteLocation = async () => {
     if (!currentLocation) return;
     const { id } = currentLocation;
-    const url = ApiEndpoint.deleteLocation.replace(':id', id.toString());
+    const url = ApiEndpoints.deleteLocation.replace(':id', id.toString());
     setIsLoading(true);
     fetchData<Omit<Location, 'id'>>(url, 'DELETE')
       .then(() => {

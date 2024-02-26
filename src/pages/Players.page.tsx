@@ -23,7 +23,6 @@ import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { SearchIcon } from '../icons/SearchIcon.tsx';
 import { capitalize } from '../shared/utils.tsx';
 import { Player } from '../models/Player.ts';
-import { ApiEndpoint } from '../models/constants.ts';
 import useFetch from '../hooks/useFetch.tsx';
 import CreateEditUserDialogComponent from '../components/Players/CreateEditUserDialog.component.tsx';
 import EditIcon from '../icons/EditIcon.tsx';
@@ -32,6 +31,7 @@ import { useToast } from '../context/Toast.context.tsx';
 import AlertDialog from '../components/AlertDialog.component.tsx';
 import { VerticalDotsIcon } from '../icons/VerticalDotsIcon.tsx';
 import { useTranslation } from 'react-i18next';
+import ApiEndpoints from '../costants/ApiEndpoints.ts';
 
 const columns = [
   { name: 'ID', uid: 'id', sortable: true },
@@ -256,7 +256,7 @@ export default function PlayersPage() {
   ]);
 
   const getUserData = () => {
-    fetchData<Player[]>(ApiEndpoint.getUsers, 'GET')
+    fetchData<Player[]>(ApiEndpoints.getUsers, 'GET')
       .then((data) => {
         setUsers(data);
         if (items.length === 1) setPage(1);
@@ -269,7 +269,7 @@ export default function PlayersPage() {
   const handleDeleteUser = async () => {
     if (!currentUser) return;
     const { id } = currentUser;
-    const url = ApiEndpoint.deleteUser.replace(':id', id.toString());
+    const url = ApiEndpoints.deleteUser.replace(':id', id.toString());
     setIsLoading(true);
     fetchData<Omit<Player, 'id'>>(url, 'DELETE')
       .then(() => {

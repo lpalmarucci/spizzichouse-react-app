@@ -9,8 +9,6 @@ function MatchList({
   matches: Match[];
   getAllMatches: () => Promise<Match[]>;
 }) {
-
-  //<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 gap-y-10 overflow-auto p-8">
   const { t } = useTranslation();
   return (
     <>

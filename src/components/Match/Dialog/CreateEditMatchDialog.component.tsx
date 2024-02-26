@@ -11,7 +11,6 @@ import {
   SelectItem,
 } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
-import { ApiEndpoint } from '../../../models/constants.ts';
 import useFetch from '../../../hooks/useFetch.tsx';
 import { useToast } from '../../../context/Toast.context.tsx';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,7 @@ import { Match } from '../../../models/Match.ts';
 import { Location } from '../../../models/Location.ts';
 import { Player } from '../../../models/Player.ts';
 import { useNavigate } from 'react-router-dom';
+import ApiEndpoints from '../../../costants/ApiEndpoints.ts';
 
 interface ICreateEditRoundProps {
   match?: Match;
@@ -48,8 +48,8 @@ function CreateEditMatchDialog({
   const { showAlertMessage } = useToast();
   const handleSaveMatch = async () => {
     const url = match
-      ? ApiEndpoint.updateMatch.replace(':id', match.id.toString())
-      : ApiEndpoint.createMatch;
+      ? ApiEndpoints.updateMatch.replace(':id', match.id.toString())
+      : ApiEndpoints.createMatch;
     const successMessage = match
       ? t('matches.messages.updateSuccess')
       : t('matches.messages.creationSuccess');
@@ -83,11 +83,11 @@ function CreateEditMatchDialog({
   );
 
   useEffect(() => {
-    fetchData<Player[]>(ApiEndpoint.getUsers, 'GET')
+    fetchData<Player[]>(ApiEndpoints.getUsers, 'GET')
       .then((data) => setUsers(data))
       .finally(() => setAreUsersLoading(false));
 
-    fetchData<Location[]>(ApiEndpoint.getLocations, 'GET')
+    fetchData<Location[]>(ApiEndpoints.getLocations, 'GET')
       .then((data) => setLocations(data))
       .finally(() => setAreLocationLoading(false));
   }, []);

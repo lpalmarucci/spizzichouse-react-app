@@ -12,11 +12,11 @@ import {
 } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
 import { Player } from '../../models/Player.ts';
-import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
 import { useTranslation } from 'react-i18next';
 import { Location } from '../../models/Location.ts';
+import ApiEndpoints from '../../costants/ApiEndpoints.ts';
 
 interface ICreateEditLocationProps {
   location?: Location;
@@ -41,8 +41,8 @@ function CreateEditLocationDialog({
   const [address, setAddress] = useState<string>('');
   const handleSaveLocation = () => {
     const url = location
-      ? ApiEndpoint.updateLocation.replace(':id', location.id.toString())
-      : ApiEndpoint.createLocation;
+      ? ApiEndpoints.updateLocation.replace(':id', location.id.toString())
+      : ApiEndpoints.createLocation;
     const method = location ? 'PATCH' : 'POST';
     const successMessage = location
       ? t('locations.messages.updateSuccess').replace('{name}', location.name)
@@ -69,7 +69,7 @@ function CreateEditLocationDialog({
   );
 
   useEffect(() => {
-    fetchData<Player[]>(ApiEndpoint.getUsers, 'GET')
+    fetchData<Player[]>(ApiEndpoints.getUsers, 'GET')
       .then((data) => setUsers(data))
       .finally(() => setIsUsersLoading(false));
   }, []);

@@ -23,9 +23,9 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import CreateEditMatchDialog from './Dialog/CreateEditMatchDialog.component.tsx';
 import AlertDialog from '../AlertDialog.component.tsx';
-import { ApiEndpoint } from '../../models/constants.ts';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
+import ApiEndpoints from '../../costants/ApiEndpoints.ts';
 
 interface IMatchCardProps {
   match: Match;
@@ -56,7 +56,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
 
   const handleEndMatch = React.useCallback(() => {
     if (!selectedMatch) return;
-    const url = ApiEndpoint.updateMatch
+    const url = ApiEndpoints.updateMatch
       .replace(':id', selectedMatch?.id.toString())
       .concat('?end=true');
     const body = JSON.stringify({ inProgress: false });
@@ -71,7 +71,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
 
   const handleDeleteMatch = React.useCallback(() => {
     if (!selectedMatch) return;
-    const url = ApiEndpoint.deleteMatch.replace(
+    const url = ApiEndpoints.deleteMatch.replace(
       ':id',
       selectedMatch?.id.toString(),
     );

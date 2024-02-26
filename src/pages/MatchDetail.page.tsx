@@ -2,13 +2,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import useFetch from '../hooks/useFetch.tsx';
 import { AggregatedRound, Round, StatusPlayer } from '../models/Round.ts';
-import { ApiEndpoint } from '../models/constants.ts';
 import { Button, Spinner, useDisclosure } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { useTranslation } from 'react-i18next';
 import { Match } from '../models/Match.ts';
 import CreateEditRoundDialog from '../components/Round/Dialog/CreateEditRoundDialog.component.tsx';
 import RoundList from '../components/Round/RoundList.component.tsx';
+import ApiEndpoints from '../costants/ApiEndpoints.ts';
 
 function MatchDetailPage() {
   const { t } = useTranslation();
@@ -74,9 +74,10 @@ function MatchDetailPage() {
 
     fetchRounds(id);
 
-    fetchData<Match>(ApiEndpoint.getSingleMatch.replace(':id', id), 'GET').then(
-      (data) => setCurrentMatch(data),
-    );
+    fetchData<Match>(
+      ApiEndpoints.getSingleMatch.replace(':id', id),
+      'GET',
+    ).then((data) => setCurrentMatch(data));
   }, [id]);
 
   const fetchRounds = React.useCallback(
@@ -84,7 +85,7 @@ function MatchDetailPage() {
       try {
         setLoadingRounds(true);
         const data = await fetchData<Round[]>(
-          ApiEndpoint.getRoundsByMatchId.replace(':matchId', id),
+          ApiEndpoints.getRoundsByMatchId.replace(':matchId', id),
           'GET',
         );
         setAggregatedRounds(aggregateRounds(data));
