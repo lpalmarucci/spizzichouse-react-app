@@ -13,7 +13,7 @@ function MatchList({
   return (
     <>
       <div className="w-full  max-w-6xl">
-        <div className="flex flex-wrap flex-grow gap-2 gap-y-10 overflow-auto p-8">
+        <div className="grid grid-cols-none sm:grid-cols-2 lg:grid-cols-4 gap-2 gap-y-10 overflow-auto p-8">
           {matches.length > 0 ? (
             matches.map((match) => (
               <MatchCard
