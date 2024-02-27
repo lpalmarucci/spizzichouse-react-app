@@ -7,7 +7,10 @@ import React, { useEffect, useState } from 'react';
 import { Match } from '../models/Match.ts';
 import useFetch from '../hooks/useFetch.tsx';
 import ApiEndpoints from '../costants/ApiEndpoints.ts';
-import { MatchProvider, useMatchContext } from '../context/Match.context.tsx';
+import {
+  DialogProvider,
+  useDialogContext,
+} from '../context/Dialog.context.tsx';
 
 //Fetch here all the matches available
 type Filter = { key: 'all' | 'in_progress'; text: string };
@@ -16,9 +19,9 @@ function MatchesPage() {
   const {
     isDialogOpen,
     onDialogOpenChange,
-    selectedMatch,
+    selectedData,
     openCreateEditDialog,
-  } = useMatchContext();
+  } = useDialogContext<Match>();
   const { t } = useTranslation();
   const fetchData = useFetch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -96,7 +99,7 @@ function MatchesPage() {
       <CreateEditMatchDialog
         isOpen={isDialogOpen}
         onOpenChange={onDialogOpenChange}
-        match={selectedMatch}
+        match={selectedData}
         onCloseDialog={() => getMatches()}
       />
     </div>
@@ -104,9 +107,9 @@ function MatchesPage() {
 }
 
 const MatchesPageWrapper = () => (
-  <MatchProvider>
+  <DialogProvider>
     <MatchesPage />
-  </MatchProvider>
+  </DialogProvider>
 );
 
 export default MatchesPageWrapper;

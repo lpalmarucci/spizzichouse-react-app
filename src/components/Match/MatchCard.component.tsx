@@ -25,7 +25,7 @@ import AlertDialog from '../AlertDialog.component.tsx';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
 import ApiEndpoints from '../../costants/ApiEndpoints.ts';
-import { useMatchContext } from '../../context/Match.context.tsx';
+import { useDialogContext } from '../../context/Dialog.context.tsx';
 
 interface IMatchCardProps {
   match: Match;
@@ -33,8 +33,8 @@ interface IMatchCardProps {
 }
 
 export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
-  const { selectedMatch, setSelectedMatch, openCreateEditDialog } =
-    useMatchContext();
+  const { selectedData, setSelectedData, openCreateEditDialog } =
+    useDialogContext<Match>();
   const {
     isOpen: isOpenEndMatchDialog,
     onOpen: onOpenEndMatchDialog,
@@ -51,9 +51,9 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
   const { showAlertMessage } = useToast();
 
   const handleEndMatch = React.useCallback(() => {
-    if (!selectedMatch) return;
+    if (!selectedData) return;
     const url = ApiEndpoints.updateMatch
-      .replace(':id', selectedMatch?.id.toString())
+      .replace(':id', selectedData?.id.toString())
       .concat('?end=true');
     const body = JSON.stringify({ inProgress: false });
     fetchData<Match>(url, 'PATCH', { body }).then(() => {
@@ -63,13 +63,13 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       });
       getAllMatches();
     });
-  }, [selectedMatch, setSelectedMatch]);
+  }, [selectedData, setSelectedData]);
 
   const handleDeleteMatch = React.useCallback(() => {
-    if (!selectedMatch) return;
+    if (!selectedData) return;
     const url = ApiEndpoints.deleteMatch.replace(
       ':id',
-      selectedMatch?.id.toString(),
+      selectedData?.id.toString(),
     );
     fetchData<Match>(url, 'DELETE').then(() => {
       showAlertMessage({
@@ -78,7 +78,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       });
       getAllMatches();
     });
-  }, [selectedMatch, setSelectedMatch]);
+  }, [selectedData, setSelectedData]);
 
   return (
     <>
@@ -134,7 +134,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  setSelectedMatch(match);
+                  setSelectedData(match);
                   openCreateEditDialog();
                 }}
                 isDisabled={!match.inProgress}
@@ -148,7 +148,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
                 variant="flat"
                 onPress={() => {
                   onOpenEndMatchDialog();
-                  setSelectedMatch(match);
+                  setSelectedData(match);
                 }}
                 isDisabled={!match.inProgress}
               >
@@ -159,7 +159,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
                 color="danger"
                 className="text-danger"
                 onPress={() => {
-                  setSelectedMatch(match);
+                  setSelectedData(match);
                   onOpenDeleteMatchDialog();
                 }}
               >
@@ -175,7 +175,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
         onOpenChange={onOpenChangeEndMatchDialog}
         contentText={t('matches.messages.askEndMatch').replace(
           '{id}',
-          selectedMatch?.id.toString() ?? '',
+          selectedData?.id.toString() ?? '',
         )}
         onConfirm={handleEndMatch}
         confirmButtonText="Confirm"
@@ -185,7 +185,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
         onOpenChange={onOpenChangeDeleteMatchDialog}
         contentText={t('matches.messages.askDelete').replace(
           '{id}',
-          selectedMatch?.id.toString() ?? '',
+          selectedData?.id.toString() ?? '',
         )}
         onConfirm={handleDeleteMatch}
       />
