@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Avatar,
   AvatarGroup,
@@ -21,11 +21,11 @@ import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon.tsx';
 import { Match } from '../../models/Match.ts';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import CreateEditMatchDialog from './Dialog/CreateEditMatchDialog.component.tsx';
 import AlertDialog from '../AlertDialog.component.tsx';
 import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
 import ApiEndpoints from '../../costants/ApiEndpoints.ts';
+import { useMatchContext } from '../../context/Match.context.tsx';
 
 interface IMatchCardProps {
   match: Match;
@@ -33,12 +33,8 @@ interface IMatchCardProps {
 }
 
 export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
-  const [selectedMatch, setSelectedMatch] = useState<Match | undefined>();
-  const {
-    isOpen: isOpenEditMatchDialog,
-    onOpen: onOpenEditMatchDialog,
-    onOpenChange: onOpenChangeEditMatchDialog,
-  } = useDisclosure();
+  const { selectedMatch, setSelectedMatch, openCreateEditDialog } =
+    useMatchContext();
   const {
     isOpen: isOpenEndMatchDialog,
     onOpen: onOpenEndMatchDialog,
@@ -138,8 +134,8 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  onOpenEditMatchDialog();
                   setSelectedMatch(match);
+                  openCreateEditDialog();
                 }}
                 isDisabled={!match.inProgress}
               >
@@ -163,8 +159,8 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
                 color="danger"
                 className="text-danger"
                 onPress={() => {
-                  onOpenDeleteMatchDialog();
                   setSelectedMatch(match);
+                  onOpenDeleteMatchDialog();
                 }}
               >
                 {t('buttons.delete')}
@@ -174,12 +170,6 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
         </CardFooter>
       </Card>
 
-      <CreateEditMatchDialog
-        isOpen={isOpenEditMatchDialog}
-        onOpenChange={onOpenChangeEditMatchDialog}
-        match={selectedMatch}
-        onCloseDialog={getAllMatches}
-      />
       <AlertDialog
         isOpen={isOpenEndMatchDialog}
         onOpenChange={onOpenChangeEndMatchDialog}

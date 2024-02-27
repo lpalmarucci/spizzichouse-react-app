@@ -194,7 +194,7 @@ function CreateEditMatchDialog({
                 color="primary"
                 onPress={async () => {
                   await handleSaveMatch();
-                  if (onCloseDialog) onCloseDialog();
+                  onCloseDialog?.();
                   onClose();
                 }}
                 isDisabled={!isFormValid}

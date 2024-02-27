@@ -1,5 +1,5 @@
 import MatchList from '../components/Match/MatchList.component.tsx';
-import { Button, Spinner, Tab, Tabs, useDisclosure } from '@nextui-org/react';
+import { Button, Spinner, Tab, Tabs } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { useTranslation } from 'react-i18next';
 import CreateEditMatchDialog from '../components/Match/Dialog/CreateEditMatchDialog.component.tsx';
@@ -7,13 +7,19 @@ import React, { useEffect, useState } from 'react';
 import { Match } from '../models/Match.ts';
 import useFetch from '../hooks/useFetch.tsx';
 import ApiEndpoints from '../costants/ApiEndpoints.ts';
+import { MatchProvider, useMatchContext } from '../context/Match.context.tsx';
 
 //Fetch here all the matches available
 type Filter = { key: 'all' | 'in_progress'; text: string };
 
 function MatchesPage() {
+  const {
+    isDialogOpen,
+    onDialogOpenChange,
+    selectedMatch,
+    openCreateEditDialog,
+  } = useMatchContext();
   const { t } = useTranslation();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const fetchData = useFetch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [matches, setMatches] = useState<Match[]>([]);
@@ -77,7 +83,7 @@ function MatchesPage() {
           className="self-end"
           color="primary"
           endContent={<PlusIcon />}
-          onPress={onOpen}
+          onPress={openCreateEditDialog}
         >
           {t('buttons.crateNewMatch')}
         </Button>
@@ -87,14 +93,20 @@ function MatchesPage() {
       ) : (
         <MatchList matches={filteredMatches} getAllMatches={getMatches} />
       )}
-
       <CreateEditMatchDialog
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={isDialogOpen}
+        onOpenChange={onDialogOpenChange}
+        match={selectedMatch}
         onCloseDialog={() => getMatches()}
       />
     </div>
   );
 }
 
-export default MatchesPage;
+const MatchesPageWrapper = () => (
+  <MatchProvider>
+    <MatchesPage />
+  </MatchProvider>
+);
+
+export default MatchesPageWrapper;
