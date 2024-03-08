@@ -7,6 +7,7 @@ import LoginPage from '../pages/Login.page';
 import MatchesPage from '../pages/Matches.page.tsx';
 import NotFoundPage from '../pages/NotFound.page.tsx';
 import MatchDetailPage from '../pages/MatchDetail.page.tsx';
+import SignUpPage from '../pages/SignUp.page.tsx';
 
 export const ROUTES = {
   Dashboard: '/dashboard',
@@ -57,6 +58,10 @@ const commonRoutes: RouteObject[] = [
   {
     path: 'login',
     element: <LoginPage />,
+  },
+  {
+    path: 'signup',
+    element: <SignUpPage />,
   },
   {
     path: '*',

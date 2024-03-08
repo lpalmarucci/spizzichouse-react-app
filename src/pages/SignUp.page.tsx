@@ -1,43 +1,49 @@
+import Title from '../components/Title.component.tsx';
 import { Button, Input } from '@nextui-org/react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Title from '../components/Title.component';
-import { useSignIn } from 'react-auth-kit';
-import useFetch from '../hooks/useFetch';
-import { AuthData } from '../models/Auth.ts';
 import { useNavigate } from 'react-router-dom';
+import useFetch from '../hooks/useFetch.tsx';
 import ApiEndpoints from '../costants/ApiEndpoints.ts';
 
-const LoginPage = () => {
-  const { t } = useTranslation();
-  const signIn = useSignIn();
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const fetchData = useFetch();
+function SignUpPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [firstname, setFirstname] = useState<string>();
+  const [lastname, setLastname] = useState<string>();
+  const [username, setUsername] = useState<string>();
+  const [password, setPassword] = useState<string>();
+  const fetch = useFetch();
 
-  function handleLogin() {
-    fetchData<AuthData>(ApiEndpoints.login, 'POST', {
-      body: JSON.stringify({ username, password }),
-    }).then((data) => {
-      if (
-        signIn({
-          token: data.access_token,
-          tokenType: 'Bearer',
-          authState: data,
-          expiresIn: data.expiresIn,
-        })
-      ) {
-        navigate('/');
-      }
+  async function handleSignUp() {
+    await fetch(ApiEndpoints.createUser, 'POST', {
+      body: JSON.stringify({ firstname, lastname, username, password }),
     });
+
+    navigate('/login');
   }
 
   return (
     <div className=" w-full h-[100dvh] dark text-foreground bg-background flex justify-center items-center">
-      <div className="flex flex-col gap-8">
-        <Title>{t('appName')}</Title>
+      <div className="w-full max-w-xs flex flex-col gap-8">
+        <Title className="text-center">{t('appName')}</Title>
         <form className="flex flex-col gap-4">
+          <Input
+            type="text"
+            label={t('labels.firstname')}
+            value={firstname}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFirstname(e.target.value)
+            }
+          />
+          <Input
+            type="text"
+            label={t('labels.lastname')}
+            value={lastname}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setLastname(e.target.value)
+            }
+          />
           <Input
             type="text"
             label={t('labels.username')}
@@ -54,8 +60,8 @@ const LoginPage = () => {
               setPassword(e.target.value)
             }
           />
-          <Button onClick={handleLogin} color="primary">
-            {t('buttons.login')}
+          <Button onClick={handleSignUp} color="primary">
+            {t('buttons.signup')}
           </Button>
         </form>
         <div className="relative text-gray-400">
@@ -66,12 +72,12 @@ const LoginPage = () => {
             <span className="bg-background px-2">Or continue with</span>
           </div>
         </div>
-        <Button variant="bordered" onClick={() => navigate('/signup')}>
-          Sign up
+        <Button variant="bordered" onClick={() => navigate('/login')}>
+          Login
         </Button>
       </div>
     </div>
   );
-};
+}
 
-export default LoginPage;
+export default SignUpPage;
