@@ -121,6 +121,8 @@
     "players": "Giocatori",
     "totalPoints": "Punti totali",
     "location": "Casata",
-    "attention": "Attenzione"
+    "attention": "Attenzione",
+    "firstname": "Nome",
+    "lastname": "Cognome"
   }
 }
