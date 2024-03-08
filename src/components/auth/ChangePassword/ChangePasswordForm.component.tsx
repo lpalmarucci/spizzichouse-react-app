@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 function ChangePasswordForm() {
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const { closeCreateEditDialog } = useDialogContext();
+  const { closeDialog } = useDialogContext();
   const { showAlertMessage } = useToast();
   const fetch = useFetch();
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ function ChangePasswordForm() {
     await fetch(ApiEndpoints.changePassword, 'POST', {
       body: JSON.stringify({ password: newPassword }),
     });
-    closeCreateEditDialog();
+    closeDialog();
     showAlertMessage({
       type: 'success',
       message: t('updatePassword.messages.updateSuccess'),

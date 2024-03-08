@@ -25,8 +25,7 @@ const UserMenu = () => {
   const navigate = useNavigate();
   const signOut = useSignOut();
   const userData = useAuthUser()();
-  const { isDialogOpen, openCreateEditDialog, closeCreateEditDialog } =
-    useDialogContext<any>();
+  const { isDialogOpen, openDialog, closeDialog } = useDialogContext<any>();
   function handleLogout() {
     localStorage.clear();
     if (signOut()) {
@@ -59,7 +58,7 @@ const UserMenu = () => {
                 title: 'flex gap-2 items-center',
               }}
               onClick={() => {
-                openCreateEditDialog();
+                openDialog();
               }}
             >
               <LockIcon />
@@ -82,7 +81,7 @@ const UserMenu = () => {
       </Dropdown>
       <CustomDrawer
         isOpen={isDialogOpen}
-        onOpenChange={(isOpen) => !isOpen && closeCreateEditDialog()}
+        onOpenChange={(isOpen) => !isOpen && closeDialog()}
       >
         <ChangePasswordForm />
       </CustomDrawer>

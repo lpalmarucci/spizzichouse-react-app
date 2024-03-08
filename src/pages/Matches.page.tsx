@@ -16,12 +16,8 @@ import {
 type Filter = { key: 'all' | 'in_progress'; text: string };
 
 function MatchesPage() {
-  const {
-    isDialogOpen,
-    onDialogOpenChange,
-    selectedData,
-    openCreateEditDialog,
-  } = useDialogContext<Match>();
+  const { isDialogOpen, onDialogOpenChange, selectedData, openDialog } =
+    useDialogContext<Match>();
   const { t } = useTranslation();
   const fetchData = useFetch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -86,7 +82,7 @@ function MatchesPage() {
           className="self-end"
           color="primary"
           endContent={<PlusIcon />}
-          onPress={openCreateEditDialog}
+          onPress={openDialog}
         >
           {t('buttons.crateNewMatch')}
         </Button>
