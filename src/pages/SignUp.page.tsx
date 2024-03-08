@@ -73,7 +73,7 @@ function SignUpPage() {
           </div>
         </div>
         <Button variant="bordered" onClick={() => navigate('/login')}>
-          Login
+          {t('buttons.login')}
         </Button>
       </div>
     </div>

@@ -67,7 +67,7 @@ const LoginPage = () => {
           </div>
         </div>
         <Button variant="bordered" onClick={() => navigate('/signup')}>
-          Sign up
+          {t('buttons.signup')}
         </Button>
       </div>
     </div>
