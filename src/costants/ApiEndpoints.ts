@@ -1,6 +1,7 @@
 const ApiEndpoints = {
   //Authentication
   login: '/auth/login',
+  changePassword: '/auth/change-password',
   //User
   getUsers: '/users',
   getSingleUser: '/users/:id',

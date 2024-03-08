@@ -302,7 +302,7 @@ export default function PlayersPage() {
 
   return (
     <div className="flex flex-col gap-12 items-center align-middle mx-auto w-full px-6 max-w-7xl">
-      <h1 className="text-6xl text-foreground font-bold">
+      <h1 className="text-5xl md:text-6xl text-foreground font-bold">
         {t('players.title')}
       </h1>
       <Table

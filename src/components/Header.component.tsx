@@ -10,31 +10,22 @@ import {
   Switch,
   Tab,
   Tabs,
-  User,
 } from '@nextui-org/react';
-
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownSection,
-  DropdownTrigger,
-} from '@nextui-org/dropdown';
 import { useTranslation } from 'react-i18next';
 import { ROUTES } from '../routes/common.routes';
 import { useNavigate } from 'react-router-dom';
-import { useAuthUser, useSignOut } from 'react-auth-kit';
-import { getInitialLetters } from '../shared/utils';
+import { useAuthUser } from 'react-auth-kit';
 import { useTheme } from '../context/Theme.context.tsx';
 import { SunIcon } from '../icons/SunIcon.tsx';
 import { MoonIcon } from '../icons/MoonIcon.tsx';
 import useLocalStorage from '../hooks/useLocalStorage.tsx';
 import { LocalStorageKeys } from '../costants/localStorage.ts';
+import UserMenu from './UserMenu.component.tsx';
 
 const Header = () => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const signOut = useSignOut();
+
   const userData = useAuthUser()();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
@@ -56,13 +47,6 @@ const Header = () => {
   if (!userData) {
     navigate(ROUTES.Login);
     return;
-  }
-
-  function handleLogout() {
-    localStorage.clear();
-    if (signOut()) {
-      navigate(ROUTES.Login);
-    }
   }
 
   return (
@@ -112,39 +96,12 @@ const Header = () => {
           <Tab key={ROUTES.Matches} title={t('menu.matches')} />
         </Tabs>
       </NavbarContent>
-
       <NavbarContent
         as="div"
         className="gap-0 md:gap-3 lg:gap-10"
         justify="end"
       >
-        <Dropdown placement="bottom-end" showArrow>
-          <DropdownTrigger className="hidden md:flex">
-            <User
-              name={`${userData?.firstname} ${userData?.lastname}`}
-              description={`@${userData?.username}`}
-              className="cursor-pointer"
-              avatarProps={{
-                name: getInitialLetters(
-                  userData?.firstname,
-                  userData?.lastname,
-                ),
-              }}
-            />
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions">
-            <DropdownSection title="Actions">
-              <DropdownItem
-                key="logout"
-                color="danger"
-                className="text-danger"
-                onClick={handleLogout}
-              >
-                {t('buttons.logout')}
-              </DropdownItem>
-            </DropdownSection>
-          </DropdownMenu>
-        </Dropdown>
+        <UserMenu />
         <Switch
           size="md"
           color="primary"
@@ -155,13 +112,15 @@ const Header = () => {
         ></Switch>
       </NavbarContent>
       <NavbarMenu>
-        {Object.entries(ROUTES).map(([key, value]) => (
-          <NavbarMenuItem key={value}>
-            <Link className="w-full" href={value} size="lg">
-              {key}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+        {Object.entries(ROUTES)
+          .filter(([key]) => key.toLowerCase() !== 'login')
+          .map(([key, value]) => (
+            <NavbarMenuItem key={value}>
+              <Link className="w-full" href={value} size="lg">
+                {key}
+              </Link>
+            </NavbarMenuItem>
+          ))}
       </NavbarMenu>
     </Navbar>
   );

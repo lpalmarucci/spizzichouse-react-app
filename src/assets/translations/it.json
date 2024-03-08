@@ -70,6 +70,13 @@
       "createRound": "Crea round"
     }
   },
+  "updatePassword": {
+    "title": "Aggiorna password",
+    "description": "Qui sotto trovi il form dove poter aggiornare la password del tuo account",
+    "messages": {
+      "updateSuccess": "Password aggiornata con successo!"
+    }
+  },
   "buttons": {
     "login": "Login",
     "signup": "Registrati",
@@ -85,7 +92,8 @@
     "addRound": "Aggiungi round",
     "edit": "Modifica",
     "endMatch": "Termina Partita",
-    "delete": "Elimina"
+    "delete": "Elimina",
+    "confirm": "Conferma"
   },
   "emptyContent": {
     "users": "Nessun utente trovato"
@@ -99,7 +107,9 @@
     "enterPointsScored": "Inserisci il numero di punti effettuati in questo round",
     "enterMaximumPointsPerMatch": "Inserisci il numero massimo di punti da raggiungere",
     "enterName": "Inserisci il nome",
-    "enterAddress": "Inserisci l'indirizzo"
+    "enterAddress": "Inserisci l'indirizzo",
+    "newPassword": "Nuova password",
+    "confirmNewPassword": "Conferma nuova password"
   },
   "labels": {
     "username": "Username",
