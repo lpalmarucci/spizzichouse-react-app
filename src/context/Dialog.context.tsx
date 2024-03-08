@@ -6,7 +6,8 @@ export interface IDialogContextProps<T extends object | undefined> {
   setSelectedData: React.Dispatch<React.SetStateAction<T>>;
   isDialogOpen: boolean;
   onDialogOpenChange: () => void;
-  openCreateEditDialog: () => void;
+  openDialog: () => void;
+  closeDialog: () => void;
 }
 
 const DialogContext = React.createContext<IDialogContextProps<any>>(
@@ -20,7 +21,7 @@ export const DialogProvider = <T extends object | undefined>(
   props: PropsWithChildren,
 ) => {
   const [selectedData, setSelectedData] = useState<T>();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   return (
     <DialogContext.Provider
@@ -28,8 +29,9 @@ export const DialogProvider = <T extends object | undefined>(
         selectedData,
         setSelectedData,
         isDialogOpen: isOpen,
-        openCreateEditDialog: onOpen,
+        openDialog: onOpen,
         onDialogOpenChange: onOpenChange,
+        closeDialog: onClose,
       }}
     >
       {props.children}

@@ -33,7 +33,7 @@ interface IMatchCardProps {
 }
 
 export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
-  const { selectedData, setSelectedData, openCreateEditDialog } =
+  const { selectedData, setSelectedData, openDialog } =
     useDialogContext<Match>();
   const {
     isOpen: isOpenEndMatchDialog,
@@ -135,7 +135,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
                 key="edit"
                 onPress={() => {
                   setSelectedData(match);
-                  openCreateEditDialog();
+                  openDialog();
                 }}
                 isDisabled={!match.inProgress}
               >

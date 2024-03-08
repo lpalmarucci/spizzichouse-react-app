@@ -25,7 +25,9 @@ const Toast = (props: ToastProps) => {
     dismissRef.current = setTimeout(() => {
       removeAlertMessage(id, wrapperRef);
     }, duration);
-  });
+
+    return () => clearTimeout(dismissRef.current);
+  }, []);
 
   return (
     <div

@@ -16,8 +16,8 @@ export default function useFetch() {
   const abortController = useRef<AbortController>(new AbortController());
 
   useEffect(() => {
-    return () => abortController.current.abort()
-  }, [])
+    return () => abortController.current.abort();
+  }, []);
 
   async function fetchData<T>(
     url: string,
@@ -36,15 +36,16 @@ export default function useFetch() {
       ...options,
       method,
       headers,
-      signal: abortController.current.signal
+      signal: abortController.current.signal,
     });
 
     if (redirectResponseWithStatus.includes(response.status)) {
-      showAlertMessage({ message: 'Non autorizzato', type: 'error' })
+      showAlertMessage({ message: 'Non autorizzato', type: 'error' });
       localStorage.clear();
       navigate(ROUTES.Login, { replace: true });
     }
 
+    if (response.status === 204) return Promise.resolve({} as T);
     const data = (await response.json()) as T | ApiError;
 
     if (isResponseError(data)) {
