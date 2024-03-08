@@ -9,10 +9,10 @@ import ApiEndpoints from '../costants/ApiEndpoints.ts';
 function SignUpPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [firstname, setFirstname] = useState<string>();
-  const [lastname, setLastname] = useState<string>();
-  const [username, setUsername] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [firstname, setFirstname] = useState<string>('');
+  const [lastname, setLastname] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const fetch = useFetch();
 
   async function handleSignUp() {
@@ -60,7 +60,16 @@ function SignUpPage() {
               setPassword(e.target.value)
             }
           />
-          <Button onClick={handleSignUp} color="primary">
+          <Button
+            isDisabled={
+              firstname === '' ||
+              lastname === '' ||
+              username === '' ||
+              password === ''
+            }
+            onClick={handleSignUp}
+            color="primary"
+          >
             {t('buttons.signup')}
           </Button>
         </form>

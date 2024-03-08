@@ -54,7 +54,11 @@ const LoginPage = () => {
               setPassword(e.target.value)
             }
           />
-          <Button onClick={handleLogin} color="primary">
+          <Button
+            isDisabled={username === '' || password === ''}
+            onClick={handleLogin}
+            color="primary"
+          >
             {t('buttons.login')}
           </Button>
         </form>
