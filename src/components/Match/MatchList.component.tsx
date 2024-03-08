@@ -23,7 +23,7 @@ function MatchList({
               />
             ))
           ) : (
-            <h1 className="w-full text-center text-xl">
+            <h1 className="w-full text-center text-xl col-span-full">
               {t('matches.not_available')}
             </h1>
           )}
