@@ -1,7 +1,6 @@
-# Spizzichouse APP React
+# Spizzichouse APP
 
-## Descrizione
-Spizzichouse APP React è un'applicazione progettata per facilitare la gestione delle partite del gioco di carte Spizzico. L'applicativo consente di registrare e monitorare le partite giocate, fornendo anche la possibilità di segnare i punteggi per ciascun round.
+Benvenuto nel frontend di "Spizzichouse" - un'applicazione per gestire le partite del gioco di carte Spizzico.
 
 ## Caratteristiche Principali
 - Registrazione delle partite di Spizzico
@@ -10,6 +9,16 @@ Spizzichouse APP React è un'applicazione progettata per facilitare la gestione 
 - Suddivisione degli utenti per casata
 - WIP: Grafico su andamento delle ultime partite
 
+## Tecnologie Utilizzate
+
+- React with Vite
+- NextUI (components library)
+- TailwindCSS
+
+## Prerequisiti
+- Node (versione minima 20)
+- PNPM
+- Docker (per buildare l'immagine)
 
 ## Installazione
 1. Effettua un clone del repository
