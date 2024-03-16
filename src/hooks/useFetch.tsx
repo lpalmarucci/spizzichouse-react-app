@@ -1,6 +1,6 @@
 import { useAuthUser } from 'react-auth-kit';
 import { ApiError } from '../models/ApiError';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../routes/common.routes';
 import { useToast } from '../context/Toast.context';
 import { useEffect, useRef } from 'react';
@@ -13,6 +13,7 @@ export default function useFetch() {
   const navigate = useNavigate();
   const auth = useAuthUser();
   const { showAlertMessage } = useToast();
+  const location = useLocation()
   const abortController = useRef<AbortController>(new AbortController());
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export default function useFetch() {
     if (redirectResponseWithStatus.includes(response.status)) {
       showAlertMessage({ message: 'Non autorizzato', type: 'error' });
       localStorage.clear();
-      navigate(ROUTES.Login, { replace: true });
+      navigate(ROUTES.Login, { replace: true, state: { from: location } });
     }
 
     if (response.status === 204) return Promise.resolve({} as T);

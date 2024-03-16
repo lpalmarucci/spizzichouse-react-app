@@ -5,7 +5,7 @@ import Title from '../components/Title.component';
 import { useSignIn } from 'react-auth-kit';
 import useFetch from '../hooks/useFetch';
 import { AuthData } from '../models/Auth.ts';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ApiEndpoints from '../costants/ApiEndpoints.ts';
 
 const LoginPage = () => {
@@ -13,6 +13,8 @@ const LoginPage = () => {
   const signIn = useSignIn();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const location = useLocation()
+  console.log(location.state?.from?.pathname);
   const fetchData = useFetch();
   const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ const LoginPage = () => {
           expiresIn: data.expiresIn,
         })
       ) {
-        navigate('/');
+        navigate(location.state?.from?.pathname ?? '/', { replace: true });
       }
     });
   }
