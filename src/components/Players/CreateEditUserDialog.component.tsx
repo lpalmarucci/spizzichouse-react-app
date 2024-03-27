@@ -71,6 +71,10 @@ function CreateEditUserDialogComponent({
       setFirstname(user.firstname);
       setLastname(user.lastname);
       setUsername(user.username);
+    } else {
+      setFirstname('');
+      setLastname('');
+      setUsername('');
     }
   }, [user]);
 
@@ -136,7 +140,7 @@ function CreateEditUserDialogComponent({
                 color="primary"
                 onPress={async () => {
                   await handleSaveUser();
-                  if (onCloseDialog) onCloseDialog();
+                  onCloseDialog?.();
                   onClose();
                 }}
                 isDisabled={!isFormValid}

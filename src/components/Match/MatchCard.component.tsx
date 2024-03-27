@@ -177,6 +177,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
           '{id}',
           selectedData?.id.toString() ?? '',
         )}
+        onCancel={() => setSelectedData(undefined)}
         onConfirm={handleEndMatch}
         confirmButtonText="Confirm"
       />
@@ -187,6 +188,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
           '{id}',
           selectedData?.id.toString() ?? '',
         )}
+        onCancel={() => setSelectedData(undefined)}
         onConfirm={handleDeleteMatch}
       />
     </>

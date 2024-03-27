@@ -75,11 +75,11 @@ function CreateEditLocationDialog({
   }, []);
 
   useEffect(() => {
-    if (location) {
-      setName(location.name);
-      setAddress(location.address);
-      setSelectedUsers(new Set(location.users.map((u) => u.id.toString())));
-    }
+    setName(location?.name ?? '');
+    setAddress(location?.address ?? '');
+    setSelectedUsers(
+      new Set(location?.users?.map((u) => u.id.toString()) ?? []),
+    );
   }, [location]);
 
   return (

@@ -87,7 +87,6 @@ const Header = () => {
             saveValueToLocalStorage(key.toString());
             setSelectedKey(key.toString());
             navigate(key.toString());
-            console.log(`navigate to ${key.toString()}`);
           }}
         >
           <Tab key={ROUTES.Dashboard} title={t('menu.dashboard')} />

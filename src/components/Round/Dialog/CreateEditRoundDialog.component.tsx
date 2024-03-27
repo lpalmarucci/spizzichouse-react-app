@@ -85,9 +85,17 @@ function CreateEditRoundDialog({
   );
 
   useEffect(() => {
+    const selectedUser = round?.user
+      ? new Set([round?.user?.id.toString()])
+      : new Set([]);
+    setSelectedUser(selectedUser);
+    setPoints(round?.points ?? 0);
     if (round) {
       setSelectedUser(new Set([round.user.id.toString()]));
       setPoints(round.points);
+    } else {
+      setSelectedUser(new Set());
+      setPoints(0);
     }
   }, [round]);
 

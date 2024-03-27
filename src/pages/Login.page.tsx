@@ -13,8 +13,7 @@ const LoginPage = () => {
   const signIn = useSignIn();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const location = useLocation()
-  console.log(location.state?.from?.pathname);
+  const location = useLocation();
   const fetchData = useFetch();
   const navigate = useNavigate();
 

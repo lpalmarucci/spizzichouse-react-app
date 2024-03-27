@@ -19,6 +19,7 @@ import { Location } from '../../../models/Location.ts';
 import { Player } from '../../../models/Player.ts';
 import { useNavigate } from 'react-router-dom';
 import ApiEndpoints from '../../../costants/ApiEndpoints.ts';
+import { useDialogContext } from '../../../context/Dialog.context.tsx';
 
 interface ICreateEditRoundProps {
   match?: Match;
@@ -33,6 +34,7 @@ function CreateEditMatchDialog({
   onOpenChange,
   onCloseDialog,
 }: ICreateEditRoundProps) {
+  const { setSelectedData } = useDialogContext<Match>();
   const fetchData = useFetch();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -93,11 +95,17 @@ function CreateEditMatchDialog({
   }, []);
 
   useEffect(() => {
-    if (match) {
-      setSelectedLocation(new Set(match.location?.id.toString() ?? undefined));
-      setSelectedUsers(new Set(match.users.map((user) => user.id.toString())));
-      setTotalPoints(match.totalPoints);
-    }
+    const location: Set<string> = match
+      ? new Set(match.location?.id.toString() ?? undefined)
+      : new Set();
+    const users: Set<string> = match
+      ? new Set(match.users.map((user) => user.id.toString()))
+      : new Set();
+    const points = match ? match.totalPoints : 0;
+
+    setSelectedLocation(location);
+    setSelectedUsers(users);
+    setTotalPoints(points);
   }, [match]);
 
   return (
@@ -105,6 +113,7 @@ function CreateEditMatchDialog({
       isOpen={isOpen}
       placement="auto"
       size="xl"
+      onClose={() => setSelectedData(undefined)}
       onOpenChange={onOpenChange}
     >
       <ModalContent>

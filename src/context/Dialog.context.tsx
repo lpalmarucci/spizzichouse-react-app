@@ -2,8 +2,8 @@ import React, { PropsWithChildren, useState } from 'react';
 import { useDisclosure } from '@nextui-org/react';
 
 export interface IDialogContextProps<T extends object | undefined> {
-  selectedData: T;
-  setSelectedData: React.Dispatch<React.SetStateAction<T>>;
+  selectedData: T | undefined;
+  setSelectedData: React.Dispatch<React.SetStateAction<T | undefined>>;
   isDialogOpen: boolean;
   onDialogOpenChange: () => void;
   openDialog: () => void;
@@ -20,7 +20,7 @@ export const useDialogContext = <T extends object>() =>
 export const DialogProvider = <T extends object | undefined>(
   props: PropsWithChildren,
 ) => {
-  const [selectedData, setSelectedData] = useState<T>();
+  const [selectedData, setSelectedData] = useState<T | undefined>();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   return (

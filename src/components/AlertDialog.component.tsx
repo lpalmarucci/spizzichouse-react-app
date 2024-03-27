@@ -16,19 +16,26 @@ interface IAlertDialogProps {
   onOpenChange: () => void;
   onConfirm?: () => void;
   confirmButtonText?: string;
+  onCancel?: () => void;
 }
 
 const AlertDialog = ({
   isOpen,
   title,
   onConfirm,
+  onCancel,
   onOpenChange,
   contentText,
   confirmButtonText = 'Elimina',
 }: IAlertDialogProps) => {
   const { t } = useTranslation();
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      backdrop="blur"
+      onClose={() => onCancel?.()}
+    >
       <ModalContent>
         {(onClose) => (
           <>

@@ -350,6 +350,7 @@ export default function PlayersPage() {
         isOpen={isOpenAlertDialog}
         onOpenChange={onOpenChangeAlertDialog}
         onConfirm={handleDeleteUser}
+        onCancel={() => setCurrentUser(undefined)}
         contentText={
           <div className="flex gap-1">
             {t('players.messages.askDelete').replace(
