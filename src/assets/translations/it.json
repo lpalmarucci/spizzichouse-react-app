@@ -8,6 +8,14 @@
     "matches": "Partite",
     "locations": "Casate"
   },
+  "dashboard": {
+    "title": "Benvenuto, {user}",
+    "subtitle": "qui puoi trovare un riassunto dei dati riguardanti le tue ultime partite",
+    "charts": {
+      "totalScore": "Punti segnati",
+      "totalPoints": "Numero massimo punti partita"
+    }
+  },
   "players": {
     "title": "Lista giocatori",
     "not_available": "Nessun giocatore disponibile",
@@ -123,6 +131,8 @@
     "location": "Casata",
     "attention": "Attenzione",
     "firstname": "Nome",
-    "lastname": "Cognome"
+    "lastname": "Cognome",
+    "matchWin": "Partite vinte",
+    "matchLose": "Partite perse"
   }
 }
