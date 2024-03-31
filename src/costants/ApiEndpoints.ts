@@ -5,6 +5,7 @@ const ApiEndpoints = {
 
   //dashboard
   summary: '/dashboard/summary',
+  summaryHistory: '/dashboard/summary/history',
   ranking: '/dashboard/ranking',
 
   //User

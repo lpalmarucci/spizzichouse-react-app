@@ -132,7 +132,9 @@
     "attention": "Attenzione",
     "firstname": "Nome",
     "lastname": "Cognome",
-    "matchWin": "Partite vinte",
-    "matchLose": "Partite perse"
+    "matchWins": "Partite vinte",
+    "matchLoses": "Partite perse",
+    "globalRanking": "Classifica globale",
+    "allMatches": "Tutte le partite"
   }
 }
