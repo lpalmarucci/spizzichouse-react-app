@@ -9,7 +9,7 @@ const DashboardPage = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col w-full h-full px-6 max-w-7xl justify-center mx-auto">
+    <div className="flex flex-col w-full h-full px-6 max-w-screen-2xl justify-center mx-auto">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl md:text-5xl text-foreground font-bold">
           {t('dashboard.title').replace('{user}', authData?.username)}

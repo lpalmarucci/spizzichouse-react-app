@@ -4,9 +4,9 @@ const ApiEndpoints = {
   changePassword: '/auth/change-password',
 
   //dashboard
-  summary: '/dashboard/summary',
-  summaryHistory: '/dashboard/summary/history',
-  ranking: '/dashboard/ranking',
+  summary: '/history/summary',
+  summaryHistory: '/history/matches',
+  ranking: '/ranking',
 
   //User
   getUsers: '/users',

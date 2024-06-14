@@ -10,10 +10,12 @@
   },
   "dashboard": {
     "title": "Benvenuto, {user}",
-    "subtitle": "qui puoi trovare un riassunto dei dati riguardanti le tue ultime partite",
+    "subtitle": "qui puoi trovare un riassunto dei dati riguardanti le ultime partite",
     "charts": {
-      "totalScore": "Punti segnati",
-      "totalPoints": "Numero massimo punti partita"
+      "totalScore": "Punti fatti",
+      "totalPoints": "Limite punti partita",
+      "lastNumberOfMatches": "Ultime {num} partite",
+      "matchNumber": "Partita #{num}"
     }
   },
   "players": {

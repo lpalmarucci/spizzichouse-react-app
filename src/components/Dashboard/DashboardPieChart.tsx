@@ -72,7 +72,7 @@ function DashboardPieChart() {
 
   if (!pieChartData) return;
   return (
-    <Card className="w-full h-full flex justify-center py-3 px-6">
+    <Card className="w-full h-full flex justify-center flex-grow-0 py-3 px-6">
       <CardHeader>
         <h1 className="text-3xl text-foreground font-semibold w-full text-center">
           {t('labels.allMatches')}

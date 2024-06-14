@@ -19,3 +19,9 @@ export type DashboardSummaryData = {
   wins: boolean;
   loses: boolean;
 };
+
+export type DashboardRankingData = {
+  userId: number;
+  total_wins: number;
+  username: string;
+};

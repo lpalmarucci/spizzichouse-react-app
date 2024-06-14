@@ -17,9 +17,7 @@ import { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch.tsx';
 import ApiEndpoints from '../../costants/ApiEndpoints.ts';
 
-type DashboardLineChartProps = {
-  data: DashboardLineChartData[];
-};
+const NUM_MATCHES_TO_SHOWS: number = 5;
 
 export default function DashboardLineChart() {
   const [summaryData, setSummaryData] = useState<DashboardLineChartData[]>();
@@ -30,11 +28,14 @@ export default function DashboardLineChart() {
     async function fetchDashboardData() {
       try {
         const data = await fetch<DashboardMatchHistory[]>(
-          ApiEndpoints.summaryHistory,
+          ApiEndpoints.summaryHistory.concat(`?limit=${NUM_MATCHES_TO_SHOWS}`),
           'GET',
         );
         const lineChartData: DashboardLineChartData[] = data.map((d) => ({
-          label: `Partita #${d.match_id}`,
+          label: t('dashboard.charts.matchNumber').replace(
+            '{num}',
+            d.match_id.toString(),
+          ),
           score: d.score,
           totalPoints: d.total_points,
         }));
@@ -53,13 +54,17 @@ export default function DashboardLineChart() {
     <Card className="w-full h-full flex justify-center py-3 px-6">
       <CardHeader>
         <h1 className="text-2xl font-semibold text-foreground w-full text-center">
-          Ultime 10 partite
+          {t('dashboard.charts.lastNumberOfMatches').replace(
+            '{num}',
+            NUM_MATCHES_TO_SHOWS.toString(),
+          )}
         </h1>
       </CardHeader>
-      <CardBody>
+      <CardBody className="px-0">
         <LineChart
-          width={500}
+          width={550}
           height={300}
+          className="mx-auto"
           data={summaryData}
           margin={{
             top: 5,
@@ -72,8 +77,8 @@ export default function DashboardLineChart() {
           <XAxis dataKey="label" />
           <YAxis />
           <Tooltip
-            labelClassName="text-black"
-            wrapperClassName="bg-foreground text-foreground"
+            labelClassName="text-black bg-foreground"
+            wrapperClassName="bg-foreground text-foreground bg-inherit border-1 rounded-md"
           />
           <Legend />
           <Line

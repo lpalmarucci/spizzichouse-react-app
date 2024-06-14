@@ -92,7 +92,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
         }}
       >
         <CardHeader className="justify-between gap-8 pb-0">
-          <span>
+          <span className="min-w-fit">
             {t('matches.labels.matchId')}: {match.id}
           </span>
           {match.inProgress ? (
