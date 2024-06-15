@@ -20,8 +20,8 @@ function DashboardRanking() {
       );
       const [first, second, third] = data;
       const map = new Map([
-        [1, first],
         [2, second],
+        [1, first],
         [3, third],
       ]);
       setRankingData(map);
@@ -40,7 +40,7 @@ function DashboardRanking() {
         </CardHeader>
         <CardBody className="flex-center">
           <div className="max-w-[400px] mx-auto w-full h-full flex justify-center items-center">
-            <div className=" w-full h-full flex gap-4 justify-between min-h-[256px]">
+            <div className=" w-full h-full flex gap-4 justify-between min-h-[20rem]">
               {Array.from(rankingData.entries()).map(([key, rank]) => (
                 <RankingPosition
                   key={rank.userId}
