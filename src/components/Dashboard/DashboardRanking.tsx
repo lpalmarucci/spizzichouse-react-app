@@ -7,7 +7,9 @@ import useFetch from '../../hooks/useFetch.tsx';
 
 function DashboardRanking() {
   const { t } = useTranslation();
-  const [rankingData, setRankingData] = useState<DashboardRankingData[]>([]);
+  const [rankingData, setRankingData] = useState<
+    Map<number, DashboardRankingData>
+  >(new Map<number, DashboardRankingData>());
   const fetchData = useFetch();
 
   useEffect(() => {
@@ -17,7 +19,12 @@ function DashboardRanking() {
         'GET',
       );
       const [first, second, third] = data;
-      setRankingData([second, first, third]);
+      const map = new Map([
+        [1, first],
+        [2, second],
+        [3, third],
+      ]);
+      setRankingData(map);
     }
 
     fetchRankingData();
@@ -34,10 +41,10 @@ function DashboardRanking() {
         <CardBody className="flex-center">
           <div className="max-w-[400px] mx-auto w-full h-full flex justify-center items-center">
             <div className=" w-full h-full flex gap-4 justify-between min-h-[256px]">
-              {rankingData.map((rank, idx) => (
+              {Array.from(rankingData.entries()).map(([key, rank]) => (
                 <RankingPosition
                   key={rank.userId}
-                  position={idx == 0 ? 2 : idx === 1 ? 1 : 3}
+                  position={key}
                   username={rank.username}
                 />
               ))}
