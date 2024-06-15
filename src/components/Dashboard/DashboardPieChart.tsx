@@ -56,15 +56,11 @@ function DashboardPieChart() {
 
   useEffect(() => {
     async function fetchDashboardData() {
-      try {
-        const data = await fetch<DashboardSummaryData>(
-          ApiEndpoints.summary,
-          'GET',
-        );
-        setSummaryData(data);
-      } catch (e) {
-        console.log(e);
-      }
+      const data = await fetch<DashboardSummaryData>(
+        ApiEndpoints.summary,
+        'GET',
+      );
+      setSummaryData(data);
     }
 
     fetchDashboardData();

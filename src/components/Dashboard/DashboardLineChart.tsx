@@ -26,23 +26,19 @@ export default function DashboardLineChart() {
 
   useEffect(() => {
     async function fetchDashboardData() {
-      try {
-        const data = await fetch<DashboardMatchHistory[]>(
-          ApiEndpoints.summaryHistory.concat(`?limit=${NUM_MATCHES_TO_SHOWS}`),
-          'GET',
-        );
-        const lineChartData: DashboardLineChartData[] = data.map((d) => ({
-          label: t('dashboard.charts.matchNumber').replace(
-            '{num}',
-            d.match_id.toString(),
-          ),
-          score: d.score,
-          totalPoints: d.total_points,
-        }));
-        setSummaryData(lineChartData);
-      } catch (e) {
-        console.log(e);
-      }
+      const data = await fetch<DashboardMatchHistory[]>(
+        ApiEndpoints.summaryHistory.concat(`?limit=${NUM_MATCHES_TO_SHOWS}`),
+        'GET',
+      );
+      const lineChartData: DashboardLineChartData[] = data.map((d) => ({
+        label: t('dashboard.charts.matchNumber').replace(
+          '{num}',
+          d.match_id.toString(),
+        ),
+        score: d.score,
+        totalPoints: d.total_points,
+      }));
+      setSummaryData(lineChartData);
     }
 
     fetchDashboardData();
