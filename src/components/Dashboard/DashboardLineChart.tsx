@@ -44,8 +44,6 @@ export default function DashboardLineChart() {
     fetchDashboardData();
   }, []);
 
-  console.log(summaryData);
-
   return (
     <Card className="w-full h-full flex justify-center py-3 px-6">
       <CardHeader>
