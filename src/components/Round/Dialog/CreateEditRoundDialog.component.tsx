@@ -80,7 +80,10 @@ function CreateEditRoundDialog({
   }
 
   const isFormValid = React.useMemo<boolean>(
-    () => Boolean(match.id && selectedUser && points >= 0 && roundNumber > 0),
+    () =>
+      Boolean(
+        match.id && selectedUser.size > 0 && points >= 0 && roundNumber > 0,
+      ),
     [match, selectedUser, points, roundNumber],
   );
 
