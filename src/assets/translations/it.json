@@ -103,13 +103,16 @@
     "edit": "Modifica",
     "endMatch": "Termina Partita",
     "delete": "Elimina",
-    "confirm": "Conferma"
+    "confirm": "Conferma",
+    "search": "Ricerca",
+    "reset": "Reset"
   },
   "emptyContent": {
     "users": "Nessun utente trovato"
   },
   "placeholders": {
     "selectUsers": "Seleziona giocatori",
+    "selectUser": "Seleziona un utente",
     "selectLocation": "Seleziona la casata",
     "searchByUsername": "Ricerca per username...",
     "searchByName": "Ricerca per nome...",
@@ -119,7 +122,8 @@
     "enterName": "Inserisci il nome",
     "enterAddress": "Inserisci l'indirizzo",
     "newPassword": "Nuova password",
-    "confirmNewPassword": "Conferma nuova password"
+    "confirmNewPassword": "Conferma nuova password",
+    "selectStatus": "Seleziona stato"
   },
   "labels": {
     "username": "Username",
@@ -137,6 +141,7 @@
     "matchWins": "Partite vinte",
     "matchLoses": "Partite perse",
     "globalRanking": "Classifica globale",
-    "allMatches": "Tutte le partite"
+    "allMatches": "Tutte le partite",
+    "status": "Stato"
   }
 }

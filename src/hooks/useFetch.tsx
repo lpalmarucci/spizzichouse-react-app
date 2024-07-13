@@ -13,7 +13,7 @@ export default function useFetch() {
   const navigate = useNavigate();
   const auth = useAuthUser();
   const { showAlertMessage } = useToast();
-  const location = useLocation()
+  const location = useLocation();
   const abortController = useRef<AbortController>(new AbortController());
 
   useEffect(() => {

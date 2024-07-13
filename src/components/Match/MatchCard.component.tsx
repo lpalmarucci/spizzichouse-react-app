@@ -26,15 +26,15 @@ import useFetch from '../../hooks/useFetch.tsx';
 import { useToast } from '../../context/Toast.context.tsx';
 import ApiEndpoints from '../../costants/ApiEndpoints.ts';
 import { useDialogContext } from '../../context/Dialog.context.tsx';
+import { IMatchFilters } from './MatchFilters.component.tsx';
 
 interface IMatchCardProps {
   match: Match;
-  getAllMatches: () => Promise<Match[]>;
+  getAllMatches: (filters: IMatchFilters) => Promise<void>;
 }
 
 export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
-  const { selectedData, setSelectedData, openDialog } =
-    useDialogContext<Match>();
+  const { selectedData, setSelectedData, openDialog } = useDialogContext<Match>();
   const {
     isOpen: isOpenEndMatchDialog,
     onOpen: onOpenEndMatchDialog,
@@ -52,31 +52,26 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
 
   const handleEndMatch = React.useCallback(() => {
     if (!selectedData) return;
-    const url = ApiEndpoints.updateMatch
-      .replace(':id', selectedData?.id.toString())
-      .concat('?end=true');
+    const url = ApiEndpoints.updateMatch.replace(':id', selectedData?.id.toString()).concat('?end=true');
     const body = JSON.stringify({ inProgress: false });
     fetchData<Match>(url, 'PATCH', { body }).then(() => {
       showAlertMessage({
         message: t('matches.messages.matchEnded'),
         type: 'success',
       });
-      getAllMatches();
+      getAllMatches({});
     });
   }, [selectedData, setSelectedData]);
 
   const handleDeleteMatch = React.useCallback(() => {
     if (!selectedData) return;
-    const url = ApiEndpoints.deleteMatch.replace(
-      ':id',
-      selectedData?.id.toString(),
-    );
+    const url = ApiEndpoints.deleteMatch.replace(':id', selectedData?.id.toString());
     fetchData<Match>(url, 'DELETE').then(() => {
       showAlertMessage({
         message: t('matches.messages.deleteSuccess'),
         type: 'success',
       });
-      getAllMatches();
+      getAllMatches({});
     });
   }, [selectedData, setSelectedData]);
 
@@ -108,13 +103,8 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
         <CardBody className="py-8">
           <AvatarGroup isBordered size="md" color="default" max={3}>
             {match.users.map((player) => (
-              <Tooltip
-                key={player.id}
-                content={`${player.firstname} ${player.lastname}`}
-              >
-                <Avatar
-                  name={getInitialLetters(player.firstname, player.lastname)}
-                />
+              <Tooltip key={player.id} content={`${player.firstname} ${player.lastname}`}>
+                <Avatar name={getInitialLetters(player.firstname, player.lastname)} />
               </Tooltip>
             ))}
           </AvatarGroup>
@@ -173,10 +163,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       <AlertDialog
         isOpen={isOpenEndMatchDialog}
         onOpenChange={onOpenChangeEndMatchDialog}
-        contentText={t('matches.messages.askEndMatch').replace(
-          '{id}',
-          selectedData?.id.toString() ?? '',
-        )}
+        contentText={t('matches.messages.askEndMatch').replace('{id}', selectedData?.id.toString() ?? '')}
         onCancel={() => setSelectedData(undefined)}
         onConfirm={handleEndMatch}
         confirmButtonText="Confirm"
@@ -184,10 +171,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
       <AlertDialog
         isOpen={isOpenDeleteMatchDialog}
         onOpenChange={onOpenChangeDeleteMatchDialog}
-        contentText={t('matches.messages.askDelete').replace(
-          '{id}',
-          selectedData?.id.toString() ?? '',
-        )}
+        contentText={t('matches.messages.askDelete').replace('{id}', selectedData?.id.toString() ?? '')}
         onCancel={() => setSelectedData(undefined)}
         onConfirm={handleDeleteMatch}
       />
