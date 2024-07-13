@@ -72,11 +72,17 @@ function MatchFilters(props: IMatchFiltersProps) {
                 selectedKeys={filters.user}
                 onSelectionChange={(id) => setFilters((prev) => ({ ...prev, user: id as Set<number> }))}
               >
-                {users.map((user) => (
-                  <SelectItem key={user.id} value={user.id}>
-                    {user.username}
+                {users.length > 0 ? (
+                  users.map((user) => (
+                    <SelectItem key={user.id} value={user.id}>
+                      {user.username}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem isDisabled key="">
+                    Nessun utente disponibile
                   </SelectItem>
-                ))}
+                )}
               </Select>
               <Select
                 label="Location"
@@ -88,9 +94,13 @@ function MatchFilters(props: IMatchFiltersProps) {
                 selectedKeys={filters.location}
                 onSelectionChange={(id) => setFilters((prev) => ({ ...prev, location: id as Set<number> }))}
               >
-                {locations.map((location) => (
-                  <SelectItem key={location.id}>{location.name}</SelectItem>
-                ))}
+                {locations.length > 0 ? (
+                  locations.map((location) => <SelectItem key={location.id}>{location.name}</SelectItem>)
+                ) : (
+                  <SelectItem isDisabled key="">
+                    Nessuna location disponibile
+                  </SelectItem>
+                )}
               </Select>
               <Select
                 label="Stato"
