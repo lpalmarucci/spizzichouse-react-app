@@ -3,7 +3,7 @@ import { Button, Spinner } from '@nextui-org/react';
 import { PlusIcon } from '../icons/PlusIcon.tsx';
 import { useTranslation } from 'react-i18next';
 import CreateEditMatchDialog from '../components/Match/Dialog/CreateEditMatchDialog.component.tsx';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Match } from '../models/Match.ts';
 import useFetch from '../hooks/useFetch.tsx';
 import ApiEndpoints from '../costants/ApiEndpoints.ts';
