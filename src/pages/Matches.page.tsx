@@ -40,8 +40,7 @@ function MatchesPage() {
       <h1 className="text-6xl text-foreground font-bold">{t('matches.title')}</h1>
 
       <MatchFilters onSearch={getMatches} />
-      <div className="w-full flex items-center justify-between">
-        <div></div>
+      <div className="w-full flex items-center justify-end">
         <Button className="self-end" color="primary" endContent={<PlusIcon />} onPress={openDialog}>
           {t('buttons.crateNewMatch')}
         </Button>

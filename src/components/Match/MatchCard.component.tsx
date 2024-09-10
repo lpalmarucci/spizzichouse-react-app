@@ -100,7 +100,7 @@ export default function MatchCard({ match, getAllMatches }: IMatchCardProps) {
             </Chip>
           )}
         </CardHeader>
-        <CardBody className="py-8">
+        <CardBody className="py-8 items-center">
           <AvatarGroup isBordered size="md" color="default" max={3}>
             {match.users.map((player) => (
               <Tooltip key={player.id} content={`${player.firstname} ${player.lastname}`}>
